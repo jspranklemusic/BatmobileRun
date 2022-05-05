@@ -24,6 +24,7 @@ class Batmobile extends GameObject{
        svg.type="image/svg+xml"
        svg.data = car_svg
        svg.style.width = "100%"
+       svg.style.transition = "0.2s"
        
 
        const logo = document.createElement("img");
@@ -42,14 +43,6 @@ class Batmobile extends GameObject{
 
        wrapper.appendChild(svg);
        wrapper.appendChild(logo);
-    
-        function percentWidth(num=100){
-            return parent.offsetWidth*(num/100);
-        }
-
-        function percentHeight(num=100){
-            return parent.offsetHeight*(num/100);
-        }
 
         this.boundary = boundary;
       
@@ -71,6 +64,19 @@ class Batmobile extends GameObject{
            rotateX(${this.svgTransform.rotateX}deg)
            rotateZ(${this.svgTransform.rotateZ}deg)
            `
+        })
+
+        GameObject.on("batarang_capacity_change",(capacity)=>{
+            let num = 100 - 100*capacity/Batarang.maxCapacity;
+            
+            this.styleElement(logo,{
+                // background: `linear-gradient(
+                //     rgb(100,100,100) 0%,
+                //     rgb(100,100,100) ${num}%,
+                //     yellow ${num}%,
+                //     yellow 100%
+                // )`
+            })
         })
 
         GameObject.listen("keydown",e=>{
@@ -127,17 +133,21 @@ class Batmobile extends GameObject{
                 }
                 this.xPosition += directions[direction];
                 this.rootElement.style.transform = `translateX(${this.xPosition/10}rem)`
-                // move the car's perspective
+                // rotate the car like turning
+                this.svgTransform.rotateZ = directions[direction]
                 this.svg.style.transform = `
-                    perspective(${this.svgTransform.perspective/10}rem) 
-                    rotateX(${this.svgTransform.rotateX}deg)
                     rotateZ(${this.svgTransform.rotateZ}deg)
                     `
                 window.setDebugState({...window.debugState, xPosition: this.xPosition})
             },30)
+
         }else if(clear){
             clearInterval(this.moveInterval[direction]);
             this.moveInterval[direction] = null;
+            this.svgTransform.rotateZ = 0
+            this.svg.style.transform = `
+                rotateZ(${this.svgTransform.rotateZ}deg)
+                `
         }
     }
 

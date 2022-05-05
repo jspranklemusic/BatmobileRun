@@ -8,7 +8,8 @@ import batarang_pic from "../../images/bat-silhouette.png"
 
 class Batarang extends GameObject{
 
-    static capacity = 5;
+    static capacity = 10;
+    static maxCapacity = 10;
     static shooting = false;
     yPosition = 0
     shootInterval = null;
@@ -52,6 +53,7 @@ class Batarang extends GameObject{
         if(!this.shootInterval && !Batarang.shooting && Batarang.capacity > 0){
             Batarang.shooting = true;
             Batarang.capacity -= 1;
+            GameObject.emit("batarang_capacity_change",Batarang.capacity)
             window.debug({batarangs: Batarang.capacity})
             this.shootInterval = setInterval(()=>{
                 const rect = this.rootElement.getBoundingClientRect();
@@ -71,7 +73,11 @@ class Batarang extends GameObject{
     }
 
     static addAmmo(count){
+        if(Batarang.capacity == Batarang.maxCapacity) return;
         Batarang.capacity += count;
+        if(Batarang.capacity > Batarang.maxCapacity){
+            Batarang.capacity = Batarang.maxCapacity
+        }
         window.debug({batarangs: Batarang.capacity})
     }
 }

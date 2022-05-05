@@ -7,6 +7,7 @@ class GameObject{
 
     static activeObjects = {}
     static listeners = {}
+    static emitters = {}
 
     rootElement = {};
     rootId = "";
@@ -69,6 +70,20 @@ class GameObject{
 
     static getGameObject(id){
         return GameObject.activeObjects[id]
+    }
+
+    static emit(id,data){
+        if(!GameObject.emitters[id]){
+            GameObject.emitters[id] = [];
+        }
+        GameObject.emitters[id].forEach(func=>func(data));
+    }
+
+    static on(id,func){
+        if(!GameObject.emitters[id]){
+            GameObject.emitters[id] = [];
+        }
+        GameObject.emitters[id].push(func);
     }
 }
 

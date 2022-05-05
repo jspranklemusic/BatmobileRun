@@ -1,7 +1,7 @@
 import GameObject from "../GameObject";
 import car_svg from "../../images/car_topview.svg";
 import batman_logo from "../../images/bat-silhouette.png";
-import { COLLISION_TYPES } from "../../game_container/CollisionListener";
+import { collision_types } from "../../game_container/CollisionListener";
 import Batarang from "../projectile/Batarang";
 
 
@@ -19,7 +19,7 @@ class Batmobile extends GameObject{
     constructor(parent, boundary=600){
        const svg = document.createElement("object");
        const wrapper = document.createElement("div")
-       super(wrapper,COLLISION_TYPES.player);
+       super(wrapper,collision_types.player);
        this.svg = svg;
        svg.type="image/svg+xml"
        svg.data = car_svg
@@ -32,9 +32,9 @@ class Batmobile extends GameObject{
        logo.width = 50;
        this.styleElement(logo,{
            position: "absolute",
-           top: "calc(50% - 10px)",
+           top: "calc(50% - 8px)",
            left: "calc(50% - 25px)",
-           background: "#ffe3004f",
+           background: "rgb(100,100,100)",
            height: "40px",
            borderRadius: "50%"
        })
@@ -60,7 +60,6 @@ class Batmobile extends GameObject{
            zIndex: 1,
            width: "9rem",
            height: "21.2rem",
-           background: "green"
        }
 
        this.styleElement(wrapper,wrapperStyle);

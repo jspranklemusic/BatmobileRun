@@ -21,6 +21,10 @@ const P = styled.p`
 let mounted = false;
 
 class Game{
+    
+    playerHealth = 100;
+    ammoCount = 5;
+
     constructor(){
         this.root = document.getElementById("map")
         this.loadLevel();
@@ -58,7 +62,7 @@ const GameContainer = props =>{
             return;
         }else{
             mounted = true; 
-            new Game();
+            window.game = new Game();
         }
     },[])
 

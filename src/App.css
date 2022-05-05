@@ -22,3 +22,12 @@ body, html{
     transform: rotateZ(359deg);
   }
 }
+
+@keyframes ammo_spinning{
+  0%{
+    transform: rotateY(0deg);
+  }
+  100%{
+    transform: rotateY(359deg);
+  }
+}

@@ -1,5 +1,5 @@
 import GameObject from "../GameObject";
-import { COLLISION_TYPES } from "../../game_container/CollisionListener";
+import { collision_types } from "../../game_container/CollisionListener";
 import batarang_pic from "../../images/bat-silhouette.png"
 
 // if a batarang collides with any object, or goes out of bounds, the batarang will be destroyed.
@@ -8,7 +8,7 @@ import batarang_pic from "../../images/bat-silhouette.png"
 
 class Batarang extends GameObject{
 
-    static capacity = 10;
+    static capacity = 5;
     static shooting = false;
     yPosition = 0
     shootInterval = null;
@@ -21,7 +21,7 @@ class Batarang extends GameObject{
         }
         const batarang = document.createElement("img");
         const wrapper = document.createElement("div");
-        super(wrapper,COLLISION_TYPES.projectile);
+        super(wrapper,collision_types.projectile);
         batarang.src = batarang_pic
         batarang.classList.add("batarang")
         this.styleElement(batarang,{
@@ -42,7 +42,10 @@ class Batarang extends GameObject{
     }
 
     onDestroy(){
-        Batarang.shooting = false;
+        return new Promise((resolve)=>{
+            Batarang.shooting = false;
+            resolve(console.log("deleting object: ",this.rootId));
+        });
     }
 
     shootBatarang(){
@@ -65,6 +68,11 @@ class Batarang extends GameObject{
                 }
             },30)
         }
+    }
+
+    static addAmmo(count){
+        Batarang.capacity += count;
+        window.debug({batarangs: Batarang.capacity})
     }
 }
 

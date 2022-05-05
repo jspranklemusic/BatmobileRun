@@ -18,10 +18,11 @@ class Road extends GameObject{
             // height: `${this.height/10}rem`,
             height: "100%",
             width: `${this.width/10}rem`,
-            background: "rgb(100,100,100)",
+            background: "rgb(125,125,125)",
             margin: "0 auto",
             // transform: "perspective(10rem) rotateX(10deg)",
-            overflow: "hidden"
+            overflow: "hidden",
+            transformStyle: "preserve-3d"
         }
         this.styleElement(this.road, roadStyle);
 
@@ -35,7 +36,6 @@ class Road extends GameObject{
         }
         for(let i = 0; i < 15; i++){
             const line = document.createElement("div");
-
             let offset = ((i*60) - 60 )/10;
             line.style.top = 0;
             line.setAttribute("transform",offset)

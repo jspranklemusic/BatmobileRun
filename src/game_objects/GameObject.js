@@ -1,4 +1,4 @@
-import { COLLISION_TYPES } from "../game_container/CollisionListener";
+import { collision_types } from "../game_container/CollisionListener";
 import CollisionListener from "../game_container/CollisionListener";
 
 const collisionListener = new CollisionListener;
@@ -10,16 +10,16 @@ class GameObject{
 
     rootElement = {};
     rootId = "";
-    collisionType = "";
+    collision_type = "";
 
-    constructor(element,collisionType) {
+    constructor(element,collision_type) {
         // sets the rootElement of the Game Object, and registers a unique ID
-        if(!COLLISION_TYPES[collisionType]){
+        if(!collision_types[collision_type]){
             throw new Error("Invalid collision type")
         }
         this.rootElement = element
         this.rootId = Math.random().toString(36).slice(2);
-        this.collisionType = collisionType;
+        this.collision_type = collision_type;
         GameObject.activeObjects[this.rootId] = this;
         collisionListener.registerCollisionObject(this);
     }
@@ -34,15 +34,20 @@ class GameObject{
         }
     }
 
-    destroy(){
-        // cleanup logic to run if it exists
-        if(this.onDestroy){
-            this.onDestroy();
-        }
+    onDestroy(){
+        return new Promise((resolve)=>{
+            resolve(console.log("deleting object: ",this.rootId));
+        });
+    }
+
+    async destroy(){
+        // first, stop the collisions
+        collisionListener.unregisterCollisionObject(this.collision_type,this.rootId);
+        // cleanup logic to run
+        await this.onDestroy();
+        
         delete GameObject.activeObjects[this.rootId];
-        collisionListener.unregisterCollisionObject(this.collisionType,this.rootId);
         this.rootElement.remove();
-        console.log("deleting object: ",this.rootId)
         delete this;
     }
 

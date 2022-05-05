@@ -35,6 +35,10 @@ class GameObject{
     }
 
     destroy(){
+        // cleanup logic to run if it exists
+        if(this.onDestroy){
+            this.onDestroy();
+        }
         delete GameObject.activeObjects[this.rootId];
         collisionListener.unregisterCollisionObject(this.collisionType,this.rootId);
         this.rootElement.remove();

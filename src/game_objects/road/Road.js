@@ -74,7 +74,8 @@ class Road extends GameObject{
                 clearInterval(itvl);
                 return;
             }
-            this.speed *= 1.1
+            this.speed *= 1.1;
+            window.debug({speed: this.speed})
             count++;
         },50)
     }
@@ -100,6 +101,8 @@ class Road extends GameObject{
                 return;
             }
             this.speed *= 0.95;
+            window.debug({speed: this.speed})
+
         },50)
     }
 

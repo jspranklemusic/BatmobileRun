@@ -8,10 +8,17 @@ import batarang_pic from "../../images/bat-silhouette.png"
 
 class Batarang extends GameObject{
 
+    static capacity = 10;
+    static shooting = false;
     yPosition = 0
+    shootInterval = null;
 
-    // to fix: the position of the batarang
+
+    // to fix: the batarang can shoot crazy crap ton full auto with unlimited ammo
     constructor(parent,xPos,yPos){
+        if(Batarang.shooting | !Batarang.capacity){
+            return undefined;
+        }
         const batarang = document.createElement("img");
         const wrapper = document.createElement("div");
         super(wrapper,COLLISION_TYPES.projectile);
@@ -29,21 +36,35 @@ class Batarang extends GameObject{
             position: "absolute",
             top: `${yPos}px`,
             left: `${xPos}px`,
-            transition: "0.1s"
         })
         parent.appendChild(wrapper)
         this.shootBatarang();
     }
 
+    onDestroy(){
+        Batarang.shooting = false;
+    }
+
     shootBatarang(){
-        setInterval(()=>{
-            if(this.rootElement.getBoundingClientRect().bottom < 0){
-                this.destroy();
-            }else{
-                this.yPosition -= 20;
-                this.rootElement.style.transform = `translateY(${this.yPosition}px)`
-            }
-        },30)
+        if(!this.shootInterval && !Batarang.shooting && Batarang.capacity > 0){
+            Batarang.shooting = true;
+            Batarang.capacity -= 1;
+            window.debug({batarangs: Batarang.capacity})
+            this.shootInterval = setInterval(()=>{
+                const rect = this.rootElement.getBoundingClientRect();
+                if(rect.bottom < 0){
+                    clearInterval(this.shootInterval)
+                    this.shootInterval = null;
+                    Batarang.shooting = false;
+                    this.destroy();
+                    window.clearDebug("batarang_position");
+                }else{
+                    this.yPosition -= 20;
+                    this.rootElement.style.transform = `translateY(${this.yPosition}px)`
+                    window.debug({batarang_position: rect.top})
+                }
+            },30)
+        }
     }
 }
 

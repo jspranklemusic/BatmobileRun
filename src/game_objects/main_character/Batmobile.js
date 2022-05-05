@@ -12,7 +12,7 @@ class Batmobile extends GameObject{
     pressingKey = null;
     svgTransform = {
         perspective: 10000,
-        rotateX: 0,//10,
+        rotateX: 0,
         rotateZ: 0
     }
 
@@ -56,22 +56,23 @@ class Batmobile extends GameObject{
        const wrapperStyle = {
            position: "absolute",
            bottom: "2rem",
-           left: "calc(50% - 5rem)",
+           left: "calc(50% - 4.5rem)",
            zIndex: 1,
-           width: "10rem",
-           height: "auto",
-           transition: "0.15s"
+           width: "9rem",
+           height: "21.2rem",
+           background: "green"
        }
 
        this.styleElement(wrapper,wrapperStyle);
        this.styleElement(svg,{
+           width: "110%",
+           marginLeft: "-.5rem",
            transform: `
            perspective(${this.svgTransform.perspective/10}rem) 
            rotateX(${this.svgTransform.rotateX}deg)
            rotateZ(${this.svgTransform.rotateZ}deg)
            `
         })
-
 
         GameObject.listen("keydown",e=>{
             if(!this.pressingKey){
@@ -90,7 +91,7 @@ class Batmobile extends GameObject{
                 let curPos = this.rootElement.getBoundingClientRect()
                 let left = curPos.left - parent.offsetWidth/2 - this.rootElement.offsetWidth*0.85
                 let top = curPos.top;
-                new Batarang(parent,left, curPos.top);
+                new Batarang(parent,left,top);
             }
         })
 
@@ -122,11 +123,10 @@ class Batmobile extends GameObject{
 
                 const diff = this.xPosition + directions[direction];
                 // return if out of bounds
-                if( diff < ((-this.boundary/2)+50) | diff > (this.boundary/2) - 50){
+                if( diff < ((-this.boundary/2)+50) | diff > (this.boundary/2) - 40){
                     return;
                 }
                 this.xPosition += directions[direction];
-                // this.svgTransform.rotateZ -= directions[direction]/20;
                 this.rootElement.style.transform = `translateX(${this.xPosition/10}rem)`
                 // move the car's perspective
                 this.svg.style.transform = `

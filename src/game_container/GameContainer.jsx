@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from 'styled-components'
 import level_1 from "../levels/level_1";
+import Batarang from "../game_objects/projectile/Batarang";
 
 const Map = styled.div`
     width: 100vw;
@@ -36,11 +37,21 @@ const GameContainer = props =>{
     const [debugState, setDebugState] = useState({
         xPosition: 0,
         boundaryLeft: -300,
-        boundaryRight: 300
+        boundaryRight: 300,
+        batarangs: Batarang.capacity,
+        speed: 3
     })
 
     window.setDebugState = setDebugState;
     window.debugState = debugState;
+    window.debug = function(obj){
+        window.setDebugState({...window.debugState, ...obj})
+    }
+    window.clearDebug = function(key){
+        const obj = {...debugState};
+        delete obj[key];
+        setDebugState(obj);
+    }
 
     useEffect(()=>{
         if(mounted){

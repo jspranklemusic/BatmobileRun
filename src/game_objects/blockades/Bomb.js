@@ -5,7 +5,7 @@ import bomb1 from '../../images/bomb1.svg'
 import explosion_animation from '../../images/explosion.gif'
 
 class Bomb extends GameObject{
-    constructor(parent,road) {
+    constructor(parent,road,coords) {
         const svg = document.createElement("object");
         const wrapper = document.createElement("div");
         super(wrapper,collision_types.destructible);
@@ -14,6 +14,7 @@ class Bomb extends GameObject{
         this.road = road;
         svg.type="image/svg+xml";
         svg.data = bomb1;
+        let xPosition = coords ? coords : { left: "0px" }
         this.styleElement(svg,{
             width: "100%"
         })
@@ -21,8 +22,8 @@ class Bomb extends GameObject{
             width: "10rem",
             height: "8rem",
             position: "absolute",
-            top: "0px",
-            left: "0px",
+            top: "-8rem",
+            ...xPosition
         })
 
         wrapper.appendChild(svg);

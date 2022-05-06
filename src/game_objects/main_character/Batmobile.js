@@ -3,11 +3,13 @@ import car_svg from "../../images/car_topview.svg";
 import batman_logo from "../../images/bat-silhouette.png";
 import { collision_types } from "../../game_container/CollisionListener";
 import Batarang from "../projectile/Batarang";
-
+import CollisionListener from "../../game_container/CollisionListener";
 
 class Batmobile extends GameObject{
 
+    stuck = false;
     xPosition = 0;
+    yPosition = 0;
     moveInterval = {};
     pressingKey = null;
     svgTransform = {
@@ -16,7 +18,7 @@ class Batmobile extends GameObject{
         rotateZ: 0
     }
 
-    constructor(parent, boundary=600){
+    constructor(parent, road){
        const svg = document.createElement("object");
        const wrapper = document.createElement("div")
        super(wrapper,collision_types.player);
@@ -44,7 +46,8 @@ class Batmobile extends GameObject{
        wrapper.appendChild(svg);
        wrapper.appendChild(logo);
 
-        this.boundary = boundary;
+        this.boundary = road.width;
+        this.road = road;
       
        const wrapperStyle = {
            position: "absolute",
@@ -91,7 +94,6 @@ class Batmobile extends GameObject{
 
                 }
             }
-
             if(e.shiftKey){
                 let curPos = this.rootElement.getBoundingClientRect()
                 let left = curPos.left - parent.offsetWidth/2 - this.rootElement.offsetWidth*0.85
@@ -111,28 +113,100 @@ class Batmobile extends GameObject{
             }
         })
 
+        
+        const resumeRegularSpeed = ()=>{
+            if(this.slowdownInterval | this.stuck) return;
+            clearInterval(this.accelerateInterval);
+            this.accelerateInterval = null;
+            this.slowdownInterval = setInterval(()=>{
+                if(this.stuck) return;
+                if(this.yPosition < 0){
+                    this.yPosition += 2;
+                    this.rootElement.style.transform = `translateX(${this.xPosition/10}rem) translateY(${this.yPosition/10}rem)`
+                }else if(this.yPosition > 0){
+                    this.yPosition -= 2;
+                    this.rootElement.style.transform = `translateX(${this.xPosition/10}rem) translateY(${this.yPosition/10}rem)`
+                }else{
+                    this.rootElement.style.transform = `translateX(${this.xPosition/10}rem) translateY(${this.yPosition/10}rem)`;
+                    clearInterval(this.slowdownInterval);
+                    this.slowdownInterval = null;
+                }
+                window.debug({yPosition:this.yPosition})
+            },30)
+        }
+        GameObject.on('resumeRegularSpeed',resumeRegularSpeed);
+
+        const accelerate = ()=> {
+                if(this.accelerateInterval | this.stuck) return;
+                clearInterval(this.slowdownInterval);
+                this.slowdownInterval = null;
+                this.accelerateInterval = setInterval(()=>{
+                    if(this.stuck) return;
+                    if(this.yPosition > -200){
+                        this.yPosition -= 2;
+                        this.rootElement.style.transform = `translateX(${this.xPosition/10}rem) translateY(${this.yPosition/10}rem)`
+                    }else{
+                        this.yPosition = -200;
+                        this.rootElement.style.transform = `translateX(${this.xPosition/10}rem) translateY(${this.yPosition/10}rem)`;
+                        clearInterval(this.accelerateInterval);
+                        this.accelerateInterval = null
+                    }
+                    window.debug({yPosition:this.yPosition})
+                },30)
+
+        }
+        GameObject.on("accelerate",accelerate);
+
+        GameObject.on("indestructible_collision",()=>{
+            this.stuck = true;
+            clearInterval(this.slowdownInterval);
+            clearInterval(this.accelerateInterval);
+            this.accelerateInterval = null;
+            this.slowdownInterval = null;
+            this.yPosition += this.road.speed;
+            this.rootElement.style.transform = `translateX(${this.xPosition/10}rem) translateY(${this.yPosition/10}rem)`;
+            setTimeout(()=>{
+                this.stuck = false;
+                resumeRegularSpeed();
+            },30)
+
+        })
    
 
        parent.appendChild(wrapper);
     }
+    
 
+
+    // move to the left or right
     move(direction = "left", clear = false){
-
+  
         const directions = {
             left: -10,
             right: 10
         }
-
+        
         if(!this.moveInterval[direction]){
             this.moveInterval[direction] = setInterval(()=>{
-
+                const playerRect = this.rootElement.getBoundingClientRect();
+                const modifiedRect = {
+                    top: playerRect.top,
+                    bottom: playerRect.bottom,
+                    left: playerRect.left + directions[direction],
+                    right: playerRect.right + directions[direction]
+                }
+                
+                // return if colliding with indestructible object
+                if(CollisionListener.willPlayerCollide(playerRect,modifiedRect)){
+                    return;
+                }
                 const diff = this.xPosition + directions[direction];
                 // return if out of bounds
                 if( diff < ((-this.boundary/2)+50) | diff > (this.boundary/2) - 40){
                     return;
                 }
                 this.xPosition += directions[direction];
-                this.rootElement.style.transform = `translateX(${this.xPosition/10}rem)`
+                this.rootElement.style.transform = `translateX(${this.xPosition/10}rem) translateY(${this.yPosition/10}rem)`
                 // rotate the car like turning
                 this.svgTransform.rotateZ = directions[direction]
                 this.svg.style.transform = `

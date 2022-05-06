@@ -1,0 +1,3 @@
+todo next:
+
+I should make the Bat logo turn yellow when at full batarang capacity, and then gradually get lower

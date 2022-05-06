@@ -8,7 +8,7 @@ import batarang_pic from "../../images/bat-silhouette.png"
 
 class Batarang extends GameObject{
 
-    static capacity = 10;
+    static capacity = 0;
     static maxCapacity = 10;
     static shooting = false;
     yPosition = 0

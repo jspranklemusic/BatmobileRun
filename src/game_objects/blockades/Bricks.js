@@ -10,7 +10,7 @@ class Bricks extends GameObject{
     yPosition = 0;
     scale = 1;
 
-    constructor(parent,road){
+    constructor(parent,road,coords){
         const svg = document.createElement("object");
         const wrapper = document.createElement("div")
         wrapper.classList.add("brick")
@@ -18,6 +18,9 @@ class Bricks extends GameObject{
         this.road = road
         svg.type="image/svg+xml"
         svg.data = bricks
+
+        let xPosition = coords ? coords : {left: "0px"}
+        
         this.styleElement(svg,{
             transform: "scale(13%)",
             transformOrigin: "top left",
@@ -26,8 +29,8 @@ class Bricks extends GameObject{
             width: "10rem",
             height: "8rem",
             position: "absolute",
-            top: "0px",
-            left: "0px"
+            top: "-8rem",
+            ...xPosition
         })
         this.brick = wrapper;
         wrapper.appendChild(svg);
@@ -72,9 +75,8 @@ class Bricks extends GameObject{
                 i++;
             },time)
             setTimeout(()=>{
-                resolve(console.log("deleting object: ",this.rootId));
+                return resolve(console.log("deleting object: ",this.rootId));
             },500)
-    
         });
     }
 

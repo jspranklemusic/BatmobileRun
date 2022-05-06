@@ -4,13 +4,21 @@ class Road extends GameObject{
 
     width = 600;
     height = 600;
+    pixelsTraversed = 0;
+    
+
+    // what should a map be? how many road units?
+
+    /*
+        speed ranges between 4-8 pixels per 1/3 second
+    */
 
     constructor(parent) {
         const road = document.createElement("div");
         super(road,"none");
         this.parent = parent;
         this.transform = 0;
-        this.speed = 3;
+        this.speed = 4;
         this.road = road;
 
         // road
@@ -68,41 +76,45 @@ class Road extends GameObject{
     }
 
     accelerate(){
-        let count = 0;
+        GameObject.emit("accelerate");
+        let interval = 50
         const itvl = setInterval(()=>{
-            if(this.speed >= 7){
+            if(this.speed >= 8){
+                this.speed = 8;
                 clearInterval(itvl);
                 return;
             }
             this.speed *= 1.1;
-            window.debug({speed: this.speed})
-            count++;
-        },50)
+        },interval)
     }
 
     moveLines(){
         setInterval(()=>{
             document.querySelectorAll(".road-line").forEach((line,i) => {
+                this.pixelsTraversed += this.speed/10;
+                GameObject.emit("pixels-traversed",this.pixelsTraversed )
                 let diff = parseFloat(line.getAttribute("transform")) + (this.speed/10);
                 if((diff*10) - 60 >= window.innerHeight){
                     diff = -6;
                 }
                 line.setAttribute("transform",diff)
-                line.style.transform = `translateY(${diff}rem)`
+                line.style.transform = `translateY(${diff}rem)`;
+                window.debug({pixelsTraversed: this.pixelsTraversed});
+
             })
         },30)
     }
 
     resumeRegularSpeed(){
+        GameObject.emit('resumeRegularSpeed')
+
         const itvl = setInterval(()=>{
-            if(this.speed <= 3){
-                this.speed = 3;
+            if(this.speed <= 4){
+                this.speed = 4;
                 clearInterval(itvl);
                 return;
             }
             this.speed *= 0.95;
-            window.debug({speed: this.speed})
-
         },50)
     }
 

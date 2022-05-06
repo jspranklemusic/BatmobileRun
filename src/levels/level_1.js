@@ -49,7 +49,6 @@ class level_1{
 
         GameObject.on('pixels-traversed',(distanceFloat)=>{
             let distance = 50*Math.floor(distanceFloat/50);
-            console.log(distance)
             if(distanceLevels[distance]){
                 distanceLevels[distance]();
                 delete distanceLevels[distance]

@@ -15,23 +15,48 @@ class level_1{
         // const bricks = new Bricks(road.rootElement,road);
         // const ammo = new Ammo(road.rootElement,road);
         // const bomb = new Bomb(road.rootElement,road)
-        const structure = new Structure(road.rootElement,road);
+        
 
         const distanceLevels = {
             0: ()=>{
-                new Bricks(road.rootElement,road);
+                new Structure(road.rootElement,road,null,{left: "0px"});
+                new Bricks(road.rootElement,road,{right: "0px"});
             },
             1000: ()=>{
+                new Structure(road.rootElement,road);
                 new Bricks(road.rootElement,road);
             },
+            2000: ()=>{
+                new Structure(road.rootElement,road,null,{left: "0px"});
+                new Bricks(road.rootElement,road,{right: "0px"});
+            },
+            2500: ()=>{
+                new Structure(road.rootElement,road);
+                new Bricks(road.rootElement,road);
+            },
+            3000: ()=>{
+                new Structure(road.rootElement,road,{width:"50%"},{left: "0px"});
+                new Bricks(road.rootElement,road,{right: "0px"});
+            },
+            3500: ()=>{
+                new Structure(road.rootElement,road,{width:"50%"});
+                new Bricks(road.rootElement,road);
+            },
+            4000: ()=>{
+
+            }
         }
 
         GameObject.on('pixels-traversed',(distanceFloat)=>{
-            let distance = Math.floor(distanceFloat);
+            let distance = 50*Math.floor(distanceFloat/50);
+            console.log(distance)
             if(distanceLevels[distance]){
                 distanceLevels[distance]();
+                delete distanceLevels[distance]
             }
         })
+
+
         
 
     }

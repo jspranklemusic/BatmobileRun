@@ -90,17 +90,17 @@ class Road extends GameObject{
 
     moveLines(){
         setInterval(()=>{
+            this.pixelsTraversed += (this.speed*1.5);
+            GameObject.emit("pixels-traversed",this.pixelsTraversed );
+            window.debug({pixelsTraversed: this.pixelsTraversed});
+
             document.querySelectorAll(".road-line").forEach((line,i) => {
-                this.pixelsTraversed += this.speed/10;
-                GameObject.emit("pixels-traversed",this.pixelsTraversed )
                 let diff = parseFloat(line.getAttribute("transform")) + (this.speed/10);
                 if((diff*10) - 60 >= window.innerHeight){
                     diff = -6;
                 }
                 line.setAttribute("transform",diff)
                 line.style.transform = `translateY(${diff}rem)`;
-                window.debug({pixelsTraversed: this.pixelsTraversed});
-
             })
         },30)
     }

@@ -38,9 +38,6 @@ class Bricks extends GameObject{
         this.moveBrick();
     }
 
-    initialize(){
-
-    }
 
     onDestroy(){
         return new Promise((resolve)=>{
@@ -71,10 +68,15 @@ class Bricks extends GameObject{
                 if(i >= BricksSvgSequence.length){
                     clearInterval(interval);
                 }
-                this.rootElement.firstChild.contentDocument.getElementById("Layer_1").innerHTML = BricksSvgSequence[i]
-                i++;
+                const contentDocument = this.rootElement.firstChild.contentDocument;
+                if(contentDocument){
+                    contentDocument.getElementById("Layer_1").innerHTML = BricksSvgSequence[i];
+                    i++;
+                }
+    
             },time)
             setTimeout(()=>{
+                clearInterval(interval)
                 return resolve(console.log("deleting object: ",this.rootId));
             },500)
         });

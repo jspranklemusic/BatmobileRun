@@ -168,7 +168,7 @@ class Batmobile extends GameObject{
             setTimeout(()=>{
                 this.stuck = false;
                 resumeRegularSpeed();
-            },30)
+            },60)
 
         })
    

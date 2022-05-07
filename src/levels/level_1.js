@@ -43,24 +43,24 @@ class level_1{
                 new Bricks(road.rootElement,road);
             },
 
-                5000: ()=>{
-                    new Bomb(road.rootElement,road,{left:"0%"},true);
-                },
-                5050: ()=>{
-                    new Bomb(road.rootElement,road,{left:"15%"},true);
-                },
-                5100: ()=>{
-                    new Bomb(road.rootElement,road,{left:"30%"},true);
-                },
-                5150: ()=>{
-                    new Bomb(road.rootElement,road,{left:"45%"},true);
-                },
-                5200: ()=>{
-                    new Bomb(road.rootElement,road,{left:"60%"},true);
-                },
-                5250: ()=>{
-                    new Bomb(road.rootElement,road,{left:"75%"},true);
-                }
+            5000: ()=>{
+                new Bomb(road.rootElement,road,{left:"0%"},true);
+            },
+            5050: ()=>{
+                new Bomb(road.rootElement,road,{left:"15%"},true);
+            },
+            5100: ()=>{
+                new Bomb(road.rootElement,road,{left:"30%"},true);
+            },
+            5150: ()=>{
+                new Bomb(road.rootElement,road,{left:"45%"},true);
+            },
+            5200: ()=>{
+                new Bomb(road.rootElement,road,{left:"60%"},true);
+            },
+            5250: ()=>{
+                new Bomb(road.rootElement,road,{left:"75%"},true);
+            }
         }
 
         GameObject.on('pixels-traversed',(distanceFloat)=>{

@@ -7,6 +7,7 @@ import explosion_animation from '../../images/explosion.gif'
 class Bomb extends GameObject{
 
     yPosition = 0;
+    playerDamage = 75;
 
     constructor(parent,road,coords,fast) {
         const svg = document.createElement("object");

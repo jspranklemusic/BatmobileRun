@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from 'styled-components'
 import level_1 from "../levels/level_1";
 import Batarang from "../game_objects/projectile/Batarang";
+import MetricsHUD from "./MetricsHUD";
 
 const Map = styled.div`
     width: 100vw;
@@ -37,12 +38,14 @@ class Game{
 
 
 const GameContainer = props =>{
+    const [health, setHealth] = useState(100);
+    const [ammo, setAmmo] = useState(0);
     const [debugVisible, setDebugVisible] = useState(true)
     const [debugState, setDebugState] = useState({
         xPosition: 0,
         boundaryLeft: -300,
         boundaryRight: 300,
-        batarangs: Batarang.capacity,
+        batarangs: Batarang.capacity,   
         speed: 3
     })
 
@@ -57,6 +60,18 @@ const GameContainer = props =>{
         setDebugState(obj);
     }
 
+    window.changeHealth = function(amt){
+        // amt can be positive or negative;
+        let currentHealth = health;
+        setHealth(currentHealth + amt);
+    }
+
+    window.changeAmmo = function(amt){
+        // amt can be positive or negative;
+        let currentAmmo = ammo;
+        setHealth(currentAmmo + amt);
+    }
+
     useEffect(()=>{
         if(mounted){
             return;
@@ -68,6 +83,7 @@ const GameContainer = props =>{
 
     return(
         <Map id="map">
+            <MetricsHUD health={health} ammo={ammo}></MetricsHUD>
           {debugVisible && <ul>
                 <P>
                     {Object.keys(debugState).map(key=><li>{key}: {debugState[key]}</li>)}

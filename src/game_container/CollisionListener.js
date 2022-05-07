@@ -33,6 +33,7 @@ class CollisionListener{
                     const objectRect = object.rootElement.getBoundingClientRect();
                     // player is bumping into left
                     if(CollisionListener.isCollision(playerRect,objectRect)){
+                        window.changeHealth(-1*object.playerDamage);
                         object.destroy();
                     }
                     projectiles.forEach((rect,i)=>{

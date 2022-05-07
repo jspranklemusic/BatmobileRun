@@ -9,6 +9,7 @@ class Bricks extends GameObject{
     xPosition = 0;
     yPosition = 0;
     scale = 1;
+    playerDamage = 25;
 
     constructor(parent,road,coords){
         const svg = document.createElement("object");

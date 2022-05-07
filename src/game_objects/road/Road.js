@@ -30,13 +30,18 @@ class Road extends GameObject{
             width: `${this.width/10}rem`,
             margin: "0 auto",
             backgroundImage:`url(${road_bg})`,
-            border:"1px solid red",
             boxSizing: "content-box",
             backgroundSize: "contain",
             backgroundRepeat: "repeat",
-            transformStyle: "preserve-3d"
+            transformStyle: "preserve-3d",
+
         }
+
         this.styleElement(this.road, roadStyle);
+
+        if(this.width > window.innerWidth){
+            document.querySelector("html").style.fontSize = `${10*(window.innerWidth/this.width)}px`;
+        }
 
         // lines
         // const lineStyle = {

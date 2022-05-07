@@ -5,24 +5,29 @@ import bomb1 from '../../images/bomb1.svg'
 import explosion_animation from '../../images/explosion.gif'
 
 class Bomb extends GameObject{
-    constructor(parent,road,coords) {
+
+    yPosition = 0;
+
+    constructor(parent,road,coords,fast) {
         const svg = document.createElement("object");
         const wrapper = document.createElement("div");
         super(wrapper,collision_types.destructible);
-
+        this.fast = fast;
         this.i = 0;
         this.road = road;
         svg.type="image/svg+xml";
         svg.data = bomb1;
         let xPosition = coords ? coords : { left: "0px" }
         this.styleElement(svg,{
-            width: "100%"
+            width: "100%",
         })
         this.styleElement(wrapper,{
-            width: "10rem",
+            width: "7.5rem",
+            paddingRight: "-10rem",
             height: "8rem",
             position: "absolute",
             top: "-8rem",
+            // background: "green",
             ...xPosition
         })
 
@@ -30,12 +35,12 @@ class Bomb extends GameObject{
         parent.appendChild(wrapper);
 
 
-        this.setAnimationSequence(svg)
+        this.setAnimationSequence(svg);
+        this.moveBomb();
     }
     
     setAnimationSequence(svg){
         let i = 0;
-
         this.interval = setInterval(()=>{
             if(i >= svgSequence.length){
                 i = 0;
@@ -62,6 +67,16 @@ class Bomb extends GameObject{
             },1000)
       
         });
+    }
+
+    moveBomb(){
+        setInterval(()=>{
+            this.yPosition += this.fast ? this.road.speed/5 : this.road.speed/10;
+            this.rootElement.style.transform = `translateY(${this.yPosition}rem)`;
+            if(this.rootElement.getBoundingClientRect().top > window.innerHeight){
+                this.destroy();
+            }
+        },30)
     }
 }
 

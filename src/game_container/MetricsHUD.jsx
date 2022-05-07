@@ -54,7 +54,6 @@ const Counter = styled.span`
     height: 100%;
     display: flex;
     align-items: center;
-    color: ${props => props.white? "white" : "black"};
 `
 
 const StatusBar = styled.div`
@@ -68,6 +67,14 @@ const StatusBar = styled.div`
     border:3px solid ${props => props.black ? "rgba(0,0,0,.6)" : "#ffffff62"};
     display: flex;
     align-items: center;
+    animation: ${props => {
+        if(props.health){
+            if (props.width <= 25) return "low_health 0.5s infinite linear";
+            if (props.width <= 50) return "medium_health 1.5s infinite linear";
+        }
+        return "none";
+    }};
+    color: ${props => props.white? "white" : "black"};
 
     &::after{
         content: "";
@@ -82,6 +89,21 @@ const StatusBar = styled.div`
     }
 `
 
+function getHealthBarColor(health){
+    if(health > 75){
+        return '#3ab107c8'
+    }
+    if(health > 50){
+        return '#97b107c6'
+    }
+    if(health > 25){
+        return '#b19507c5'
+    }
+    if(health > 0){
+        return '#b12307c5'
+    }
+}
+
 const MetricsHUD = props => {
 
     const healthBackground = '#3ab107c8';
@@ -89,7 +111,7 @@ const MetricsHUD = props => {
 
     return(
         <Container>
-           <StatusBar background={healthBackground} width={props.health} >
+           <StatusBar white health background={getHealthBarColor(props.health)} width={props.health} >
                 <Cross></Cross>
                <Counter white>{props.health}</Counter>
            </StatusBar>

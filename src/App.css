@@ -14,6 +14,34 @@ body, html{
   position: relative;
 }
 
+@keyframes low_health{
+  0%{
+    color: #ffffff62;
+    border-color: #ffffff62;
+  }
+  50%{
+    color: red;
+    border-color: red;
+  }100%{
+    color: #ffffff62;
+    border-color: #ffffff62;
+  }
+}
+
+@keyframes medium_health{
+  0%{
+    color: #ffffff62;
+    border-color: #ffffff62;
+  }
+  50%{
+    color: rgb(255, 193, 134);
+    border-color: rgb(255, 193, 134);
+  }100%{
+    color: #ffffff62;
+    border-color: #ffffff62;
+  }
+}
+
 @keyframes spinning{
   0%{
     transform: rotateZ(0deg);

@@ -31,7 +31,7 @@ const Cross = styled.div`
         content: "";
         position: absolute;
         top: .7rem;
-        left: -.8rem;
+        left: -.75rem;
         width: 2rem;
         height: .5rem;
         background: white;

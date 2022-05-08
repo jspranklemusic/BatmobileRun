@@ -62,8 +62,9 @@ const GameContainer = props =>{
 
     window.changeHealth = function(amt){
         // amt can be positive or negative;
-        let currentHealth = health;
-        setHealth(currentHealth + amt);
+        let currentHealth = health + amt;
+        console.log(currentHealth,health,amt)
+        setHealth(currentHealth);
     }
 
     window.changeAmmo = function(amt){

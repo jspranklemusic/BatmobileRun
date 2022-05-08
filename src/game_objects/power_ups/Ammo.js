@@ -9,6 +9,7 @@ class Ammo extends GameObject{
     xPosition = 0;
     moveInterval = null;
 
+
     constructor(parent,road,capacity=10){
         const element = document.createElement("div");
         super(element,collision_types.powerup);
@@ -28,7 +29,7 @@ class Ammo extends GameObject{
         this.styleElement(element,{
             position: "absolute",
             top: '0px',
-            right: '50%',
+            right: '30%',
             width: "6rem",
             height: "6rem"
         })
@@ -48,6 +49,10 @@ class Ammo extends GameObject{
             }
 
         },30)
+    }
+
+    powerupFunction(){
+        window.changeAmmo(this.capacity)
     }
 
     onDestroy(){

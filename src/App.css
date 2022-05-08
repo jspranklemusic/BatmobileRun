@@ -14,6 +14,24 @@ body, html{
   position: relative;
 }
 
+.cross{
+  width: .5rem;
+  height: 2rem;
+  background: white;
+  z-index: 2;
+  border-radius: 100px;
+}
+.cross::after{
+  content: "";
+  position: absolute;
+  top: .7rem;
+  left: -.75rem;
+  width: 2rem;
+  height: .5rem;
+  background: white;
+  border-radius: 100px;
+}
+
 @keyframes low_health{
   0%{
     color: #ffffff62;

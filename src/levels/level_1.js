@@ -16,62 +16,65 @@ class level_1{
         // const bricks = new Bricks(road.rootElement,road);
         // const ammo = new Ammo(road.rootElement,road);
         // const bomb = new Bomb(road.rootElement,road)
-        
-        
+        const distanceLevels = {};
+        let currentPosition = 0;
 
-        const distanceLevels = {
-            0: ()=>{
-                new Structure(road.rootElement,road,null,{left: "0px"});            },
-            1000: ()=>{
+        // Two values. 1. The distance from the previous position, 2. the generations to run
+        const startingPositions = [
+            [0,()=>{
+                new Structure(road.rootElement,road,null,{left: "0px"});            
+            }],
+            [1000,()=>{
                 new Structure(road.rootElement,road);
-            },
-            1500: ()=>{
+            }],
+            [500,()=>{
                 new Bricks(road.rootElement,road,{left: `calc(50% - ${Bricks.width/2}rem)`})
-            },
-            2000: ()=>{
+            }],
+            [500,()=>{
                 new Structure(road.rootElement,road,null,{left: "0px"});
                 new Bricks(road.rootElement,road,{right: `0rem`});
-            },
-            2500: ()=>{
+            }],
+            [500,()=>{
                 new Structure(road.rootElement,road);
                 new Bricks(road.rootElement,road);
-            },
-            3000: ()=>{
+            }],
+            [500,()=>{
                 new Structure(road.rootElement,road,{width:"50%"},{left: "0px"});
                 new Bricks(road.rootElement,road,{right: "0px"});
-            },
-            3500: ()=>{
+            }],
+            [500,()=>{
                 new Bricks(road.rootElement,road,{left:`${Bricks.width*3}rem`});
                 new Bricks(road.rootElement,road,{left:`${Bricks.width*4}rem`});
                 new Bricks(road.rootElement,road,{left:`${Bricks.width*5}rem`});
-
-            },
-            4000: ()=>{
+            }],
+            [500,()=>{
                 new Health(road.rootElement,road);
                 new Ammo(road.rootElement,road);
-            },
-
-            5000: ()=>{
+            }],
+            [1000,()=>{
                 new Bomb(road.rootElement,road,{left:"0%"},true);
-            },
-            5050: ()=>{
+            }],
+            [50,()=>{
                 new Bomb(road.rootElement,road,{left:"15%"},true);
-            },
-            5100: ()=>{
+            }],
+            [50,()=>{
                 new Bomb(road.rootElement,road,{left:"30%"},true);
-            },
-            5150: ()=>{
+            }],
+            [50,()=>{
                 new Bomb(road.rootElement,road,{left:"45%"},true);
-            },
-            5200: ()=>{
+            }],
+            [50,()=>{
                 new Bomb(road.rootElement,road,{left:"60%"},true);
-            },
-            5250: ()=>{
+            }],
+            [50, ()=>{
                 new Bomb(road.rootElement,road,{left:"75%"},true);
-            }
-        }
+            }]
+        ]
 
-
+        startingPositions.forEach(position=>{
+            currentPosition += position[0];
+            distanceLevels[currentPosition] = position[1];
+        })
 
         // const distanceLevels = {}
 

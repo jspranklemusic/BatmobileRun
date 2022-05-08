@@ -27,8 +27,7 @@ class CollisionListener{
                 const player = CollisionListener.collisionObjects.player[0];
                 const playerRect = player.rootElement.getBoundingClientRect();
                 const projectiles = CollisionListener.collisionObjects.projectile.map(p=>p.rootElement.getBoundingClientRect());
-
-
+                
                 CollisionListener.collisionObjects.destructible.forEach(object=>{
                     const objectRect = object.rootElement.getBoundingClientRect();
                     // player is bumping into left
@@ -135,6 +134,7 @@ class CollisionListener{
 
     unregisterCollisionObject(type,rootId){
         let index = CollisionListener.collisionObjects[type].findIndex(obj=>obj.rootId == rootId);
+        if (index < 0) return;
         CollisionListener.collisionObjects[type].splice(index,1);
     }
 

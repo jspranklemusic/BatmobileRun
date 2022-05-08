@@ -62,6 +62,7 @@ class CollisionListener{
                 CollisionListener.collisionObjects.powerup.forEach(powerup=>{
                     const powerupRect = powerup.rootElement.getBoundingClientRect();
                     if(CollisionListener.isCollision(playerRect,powerupRect)){
+                        window.changeAmmo(10)
                         powerup.destroy();
                     }
                 })

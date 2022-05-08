@@ -17,51 +17,55 @@ class level_1{
         // const bomb = new Bomb(road.rootElement,road)
         
 
-        const distanceLevels = {
-            0: ()=>{
-                new Structure(road.rootElement,road,null,{left: "0px"});
-                new Bricks(road.rootElement,road,{right: "0px"});
-            },
-            1000: ()=>{
-                new Structure(road.rootElement,road);
-                new Bricks(road.rootElement,road);
-            },
-            2000: ()=>{
-                new Structure(road.rootElement,road,null,{left: "0px"});
-                new Bricks(road.rootElement,road,{right: "0px"});
-            },
-            2500: ()=>{
-                new Structure(road.rootElement,road);
-                new Bricks(road.rootElement,road);
-            },
-            3000: ()=>{
-                new Structure(road.rootElement,road,{width:"50%"},{left: "0px"});
-                new Bricks(road.rootElement,road,{right: "0px"});
-            },
-            3500: ()=>{
-                new Structure(road.rootElement,road,{width:"50%"});
-                new Bricks(road.rootElement,road);
-            },
+        // const distanceLevels = {
+        //     0: ()=>{
+        //         new Structure(road.rootElement,road,null,{left: "0px"});
+        //         new Bricks(road.rootElement,road,{right: "0px"});
+        //     },
+        //     1000: ()=>{
+        //         new Structure(road.rootElement,road);
+        //         new Bricks(road.rootElement,road);
+        //     },
+        //     2000: ()=>{
+        //         new Structure(road.rootElement,road,null,{left: "0px"});
+        //         new Bricks(road.rootElement,road,{right: "0px"});
+        //     },
+        //     2500: ()=>{
+        //         new Structure(road.rootElement,road);
+        //         new Bricks(road.rootElement,road);
+        //     },
+        //     3000: ()=>{
+        //         new Structure(road.rootElement,road,{width:"50%"},{left: "0px"});
+        //         new Bricks(road.rootElement,road,{right: "0px"});
+        //     },
+        //     3500: ()=>{
+        //         new Structure(road.rootElement,road,{width:"50%"});
+        //         new Bricks(road.rootElement,road);
+        //     },
 
-            5000: ()=>{
-                new Bomb(road.rootElement,road,{left:"0%"},true);
-            },
-            5050: ()=>{
-                new Bomb(road.rootElement,road,{left:"15%"},true);
-            },
-            5100: ()=>{
-                new Bomb(road.rootElement,road,{left:"30%"},true);
-            },
-            5150: ()=>{
-                new Bomb(road.rootElement,road,{left:"45%"},true);
-            },
-            5200: ()=>{
-                new Bomb(road.rootElement,road,{left:"60%"},true);
-            },
-            5250: ()=>{
-                new Bomb(road.rootElement,road,{left:"75%"},true);
-            }
-        }
+        //     5000: ()=>{
+        //         new Bomb(road.rootElement,road,{left:"0%"},true);
+        //     },
+        //     5050: ()=>{
+        //         new Bomb(road.rootElement,road,{left:"15%"},true);
+        //     },
+        //     5100: ()=>{
+        //         new Bomb(road.rootElement,road,{left:"30%"},true);
+        //     },
+        //     5150: ()=>{
+        //         new Bomb(road.rootElement,road,{left:"45%"},true);
+        //     },
+        //     5200: ()=>{
+        //         new Bomb(road.rootElement,road,{left:"60%"},true);
+        //     },
+        //     5250: ()=>{
+        //         new Bomb(road.rootElement,road,{left:"75%"},true);
+        //     }
+        // }
+
+        new Ammo(road.rootElement,road)
+
+        const distanceLevels = {}
 
         GameObject.on('pixels-traversed',(distanceFloat)=>{
             let distance = 50*Math.floor(distanceFloat/50);

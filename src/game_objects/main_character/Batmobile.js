@@ -69,19 +69,6 @@ class Batmobile extends GameObject{
            `
         })
 
-        GameObject.on("batarang_capacity_change",(capacity)=>{
-            let num = 100 - 100*capacity/Batarang.maxCapacity;
-            
-            this.styleElement(logo,{
-                // background: `linear-gradient(
-                //     rgb(100,100,100) 0%,
-                //     rgb(100,100,100) ${num}%,
-                //     yellow ${num}%,
-                //     yellow 100%
-                // )`
-            })
-        })
-
         GameObject.listen("keydown",e=>{
             if(!this.pressingKey){
                 if(e.keyCode == 37){

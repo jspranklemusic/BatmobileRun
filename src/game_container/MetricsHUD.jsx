@@ -115,7 +115,7 @@ const MetricsHUD = props => {
                 <Cross></Cross>
                <Counter white>{props.health}</Counter>
            </StatusBar>
-           <StatusBar black background={ammoBackground} width={props.ammo}>
+           <StatusBar black background={ammoBackground} width={props.ammo*10}>
                <Img src={batarang_logo}/>
                <Counter>{props.ammo}</Counter>
            </StatusBar>

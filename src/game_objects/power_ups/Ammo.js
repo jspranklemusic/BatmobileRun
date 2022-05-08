@@ -9,7 +9,7 @@ class Ammo extends GameObject{
     xPosition = 0;
     moveInterval = null;
 
-    constructor(parent,road,capacity=5){
+    constructor(parent,road,capacity=10){
         const element = document.createElement("div");
         super(element,collision_types.powerup);
         const img = document.createElement('img')

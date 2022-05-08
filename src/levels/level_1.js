@@ -17,19 +17,20 @@ class level_1{
         // const ammo = new Ammo(road.rootElement,road);
         // const bomb = new Bomb(road.rootElement,road)
         
+        
 
         const distanceLevels = {
             0: ()=>{
-                new Structure(road.rootElement,road,null,{left: "0px"});
-                new Bricks(road.rootElement,road,{right: "0px"});
-            },
+                new Structure(road.rootElement,road,null,{left: "0px"});            },
             1000: ()=>{
                 new Structure(road.rootElement,road);
-                new Bricks(road.rootElement,road);
+            },
+            1500: ()=>{
+                new Bricks(road.rootElement,road,{left: `calc(50% - ${Bricks.width/2}rem)`})
             },
             2000: ()=>{
                 new Structure(road.rootElement,road,null,{left: "0px"});
-                new Bricks(road.rootElement,road,{right: "0px"});
+                new Bricks(road.rootElement,road,{right: `0rem`});
             },
             2500: ()=>{
                 new Structure(road.rootElement,road);
@@ -40,8 +41,10 @@ class level_1{
                 new Bricks(road.rootElement,road,{right: "0px"});
             },
             3500: ()=>{
-                new Structure(road.rootElement,road,{width:"50%"});
-                new Bricks(road.rootElement,road);
+                new Bricks(road.rootElement,road,{left:`${Bricks.width*3}rem`});
+                new Bricks(road.rootElement,road,{left:`${Bricks.width*4}rem`});
+                new Bricks(road.rootElement,road,{left:`${Bricks.width*5}rem`});
+
             },
             4000: ()=>{
                 new Health(road.rootElement,road);

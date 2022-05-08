@@ -10,6 +10,7 @@ class Bricks extends GameObject{
     yPosition = 0;
     scale = 1;
     playerDamage = 25;
+    static width = 10
 
     constructor(parent,road,coords){
         const svg = document.createElement("object");
@@ -27,7 +28,7 @@ class Bricks extends GameObject{
             transformOrigin: "top left",
         })
         this.styleElement(wrapper,{
-            width: "10rem",
+            width: `${Bricks.width}rem`,
             height: "8rem",
             position: "absolute",
             top: "-8rem",

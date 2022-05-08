@@ -20,6 +20,7 @@ const P = styled.p`
 `
 
 let mounted = false;
+let seconds = 0;
 
 class Game{
     
@@ -40,7 +41,7 @@ class Game{
 const GameContainer = props =>{
     const [health, setHealth] = useState(100);
     const [ammo, setAmmo] = useState(0);
-    const [debugVisible, setDebugVisible] = useState(true)
+    const [debugVisible, setDebugVisible] = useState(true);
     const [debugState, setDebugState] = useState({
         xPosition: 0,
         boundaryLeft: -300,
@@ -83,6 +84,10 @@ const GameContainer = props =>{
         }else{
             mounted = true; 
             window.game = new Game();
+            setInterval(()=>{
+                seconds++;
+                window.debug({seconds})
+            },1000)
         }
     },[])
 

@@ -144,7 +144,7 @@ class Batmobile extends GameObject{
         }
         GameObject.on("accelerate",accelerate);
 
-        GameObject.on("indestructible_collision",()=>{
+        GameObject.on("indestructible_collision",(objectRect)=>{
             this.stuck = true;
             clearInterval(this.slowdownInterval);
             clearInterval(this.accelerateInterval);

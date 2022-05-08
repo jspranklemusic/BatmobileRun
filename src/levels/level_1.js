@@ -42,33 +42,50 @@ class level_1{
                 new Structure(road.rootElement,road,{width:"50%"},{left: "0px"});
                 new Bricks(road.rootElement,road,{right: "0px"});
             }],
-            [500,()=>{
+            [550,()=>{
                 new Bricks(road.rootElement,road,{left:`${Bricks.width*3}rem`});
                 new Bricks(road.rootElement,road,{left:`${Bricks.width*4}rem`});
                 new Bricks(road.rootElement,road,{left:`${Bricks.width*5}rem`});
             }],
             [500,()=>{
                 new Health(road.rootElement,road);
-                new Ammo(road.rootElement,road);
+                new Ammo(road.rootElement,road,5);
             }],
-            [1000,()=>{
-                new Bomb(road.rootElement,road,{left:"0%"},true);
-            }],
-            [50,()=>{
-                new Bomb(road.rootElement,road,{left:"15%"},true);
+            [650,()=>{
+                new Bomb(road.rootElement,road,{left:"10%"},true);
             }],
             [50,()=>{
                 new Bomb(road.rootElement,road,{left:"30%"},true);
             }],
             [50,()=>{
-                new Bomb(road.rootElement,road,{left:"45%"},true);
+                new Bomb(road.rootElement,road,{left:"50%"},true);
             }],
             [50,()=>{
-                new Bomb(road.rootElement,road,{left:"60%"},true);
+                new Bomb(road.rootElement,road,{left:"70%"},true);
             }],
-            [50, ()=>{
-                new Bomb(road.rootElement,road,{left:"75%"},true);
-            }]
+ 
+
+
+            [650,()=>{
+                new Bomb(road.rootElement,road,{left:"83.33%"},true);
+            }],
+           
+            [50,()=>{
+                new Bomb(road.rootElement,road,{left:"49.99%"},true);
+            }],
+            [50,()=>{
+                new Bomb(road.rootElement,road,{left:"66.66%"},true);
+            }],
+            [50,()=>{
+                new Bomb(road.rootElement,road,{left:"16.67%"},true);
+            }],
+            [50,()=>{
+                new Bomb(road.rootElement,road,{left:"33.32%"},true);
+            }],
+            [50,()=>{
+                new Bomb(road.rootElement,road,{left:"0%"},true);
+            }],
+          
         ]
 
         startingPositions.forEach(position=>{

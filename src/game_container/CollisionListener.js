@@ -27,7 +27,7 @@ class CollisionListener{
                 const player = CollisionListener.collisionObjects.player[0];
                 const playerRect = player.rootElement.getBoundingClientRect();
                 const projectiles = CollisionListener.collisionObjects.projectile.map(p=>p.rootElement.getBoundingClientRect());
-                
+
                 CollisionListener.collisionObjects.destructible.forEach(object=>{
                     const objectRect = object.rootElement.getBoundingClientRect();
                     // player is bumping into left
@@ -48,7 +48,7 @@ class CollisionListener{
                     const objectRect = object.rootElement.getBoundingClientRect();
                     // player is bumping into left
                     const boundary = CollisionListener.isBoundary(playerRect,objectRect)
-                    if(boundary){
+                    if(boundary && playerRect.bottom > objectRect.bottom){
                         GameObject.emit('indestructible_collision')
                     }
                     projectiles.forEach((rect,i)=>{

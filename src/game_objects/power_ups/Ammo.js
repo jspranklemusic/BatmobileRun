@@ -10,7 +10,7 @@ class Ammo extends GameObject{
     moveInterval = null;
 
 
-    constructor(parent,road,capacity=10){
+    constructor(parent,road,capacity=10,position){
         const element = document.createElement("div");
         super(element,collision_types.powerup);
         const img = document.createElement('img')
@@ -31,7 +31,8 @@ class Ammo extends GameObject{
             top: '0px',
             right: '30%',
             width: "6rem",
-            height: "6rem"
+            height: "6rem",
+            ...position
         })
 
 

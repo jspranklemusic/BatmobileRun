@@ -8,7 +8,7 @@ class Health extends GameObject{
     xPosition = 0;
     moveInterval = null;
 
-    constructor(parent,road,capacity=100){
+    constructor(parent,road,capacity=100,position={}){
         const element = document.createElement("div");
         super(element,collision_types.powerup);
         const div = document.createElement('div')
@@ -36,7 +36,8 @@ class Health extends GameObject{
             top: '0px',
             left: '30%',
             width: "6rem",
-            height: "6rem"
+            height: "6rem",
+            ...position
         })
 
 

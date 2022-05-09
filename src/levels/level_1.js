@@ -19,17 +19,63 @@ class level_1{
         const distanceLevels = {};
         let currentPosition = 0;
 
-        // Two values. 1. The distance from the previous position, 2. the generations to run
+        // Two values. 1. The distance from the previous position, 2. the function to run
         const startingPositions = [
-            [0,()=>{
-                new Structure(road.rootElement,road,null,{left: "0px"});            
+            // only structures
+            // [0,()=>{
+            //     new Structure(road.rootElement,road,null,{left: "0px"});            
+            // }],
+            // [1000,()=>{
+            //     new Structure(road.rootElement,road);
+            // }],
+            // [750,()=>{
+            //     new Structure(road.rootElement,road,{width:"84%"},{left:"0px"});
+            // }],
+            [750,()=>{
+                new Structure(road.rootElement,road,{width:"84%"},{right:"0px"});
             }],
-            [1000,()=>{
-                new Structure(road.rootElement,road);
+            [750,()=>{
+                new Structure(road.rootElement,road,{width:"80%",height:"64rem"},{left:"0px"});
             }],
-            [500,()=>{
-                new Bricks(road.rootElement,road,{left: `calc(50% - ${Bricks.width/2}rem)`})
+            [1400,()=>{
+                new Structure(road.rootElement,road,{width:"80%",height:"64rem"},{right:"0px"});
             }],
+            [1500,()=>{
+                new Ammo(road.rootElement,road,5,{left:"calc(50% - 3rem)"});
+            }],
+
+            // only bricks
+            [300,()=>{
+                new Bricks(road.rootElement,road,{left: `0px`});
+                new Bricks(road.rootElement,road,{left: `calc(50% - ${Bricks.width/2}rem)`});
+                new Bricks(road.rootElement,road,{right: `0px`});
+            }],
+        
+            [800,()=>{
+
+                new Bricks(road.rootElement,road,{left: "10rem"});
+                new Bricks(road.rootElement,road,{left: "15rem"});
+                new Bricks(road.rootElement,road,{left: "35rem"});
+                new Bricks(road.rootElement,road,{left: "40rem"});
+   
+            }],
+            [800,()=>{
+                new Bricks(road.rootElement,road,{left: "0rem"});
+                new Bricks(road.rootElement,road,{left: "10rem"});
+                new Bricks(road.rootElement,road,{left: "20rem"});
+                new Bricks(road.rootElement,road,{left: "30rem"});
+                new Bricks(road.rootElement,road,{left: "40rem"});
+            }],
+            [800,()=>{
+                new Bricks(road.rootElement,road,{left: "0rem"});
+                new Bricks(road.rootElement,road,{left: "20rem"});
+                new Bricks(road.rootElement,road,{left: "30rem"});
+                new Bricks(road.rootElement,road,{left: "40rem"});
+                new Bricks(road.rootElement,road,{left: "50rem"});
+            }],
+
+            // bricks and structures, closer together
+     
             [500,()=>{
                 new Structure(road.rootElement,road,null,{left: "0px"});
                 new Bricks(road.rootElement,road,{right: `0rem`});
@@ -51,6 +97,9 @@ class level_1{
                 new Health(road.rootElement,road);
                 new Ammo(road.rootElement,road,5);
             }],
+
+            // first bombs section
+
             [650,()=>{
                 new Bomb(road.rootElement,road,{left:"10%"},true);
             }],
@@ -63,9 +112,6 @@ class level_1{
             [50,()=>{
                 new Bomb(road.rootElement,road,{left:"70%"},true);
             }],
- 
-
-
             [650,()=>{
                 new Bomb(road.rootElement,road,{left:"83.33%"},true);
             }],
@@ -85,6 +131,194 @@ class level_1{
             [50,()=>{
                 new Bomb(road.rootElement,road,{left:"0%"},true);
             }],
+
+            [300, ()=>{
+                new Health(road.rootElement,road,100,{left:"calc(50% - 3rem)"});
+            }],         
+
+                
+
+            // give a bit of a breather, and then it will go to town and end the first level
+            [1200, ()=>{
+                    new Bricks(road.rootElement,road,{left:`${Bricks.width*3}rem`});
+                    new Bricks(road.rootElement,road,{left:`${Bricks.width*4}rem`});
+                    new Bricks(road.rootElement,road,{left:`${Bricks.width*5}rem`});
+                }
+            ],
+
+            // waves of bricks
+            
+            [350,()=>{
+                new Bricks(road.rootElement,road,{left: "20rem"});
+            }],
+            [350,()=>{
+                new Bricks(road.rootElement,road,{left: "0rem"});
+            }],
+            [350,()=>{
+                new Bricks(road.rootElement,road,{left: "30rem"});
+            }],
+            [350,()=>{
+                new Bricks(road.rootElement,road,{left: "50rem"});
+            }],
+            [350,()=>{
+                new Bricks(road.rootElement,road,{left: "40rem"});
+            }],
+            [350,()=>{
+                new Bricks(road.rootElement,road,{left: "10rem"});
+            }],
+            // 
+            [350,()=>{
+                new Bricks(road.rootElement,road,{left: "30rem"});
+            }],
+            [350,()=>{
+                new Bricks(road.rootElement,road,{left: "50rem"});
+            }],
+            [350,()=>{
+                new Bricks(road.rootElement,road,{left: "0rem"});
+            }],
+            [350,()=>{
+                new Bricks(road.rootElement,road,{left: "20rem"});
+            }],
+            [350,()=>{
+                new Bricks(road.rootElement,road,{left: "10rem"});
+            }],
+            [350,()=>{
+                new Bricks(road.rootElement,road,{left: "40rem"});
+            }],
+            // speed up
+            [0,()=>{
+                new Health(road.rootElement,road,100,{left:"calc(50% - 3rem)"});
+            }],
+            [175,()=>{
+                new Bricks(road.rootElement,road,{left: "20rem"});
+            }],
+            [175,()=>{
+                new Bricks(road.rootElement,road,{left: "0rem"});
+            }],
+            [175,()=>{
+                new Bricks(road.rootElement,road,{left: "50rem"});
+            }],
+            [175,()=>{
+                new Bricks(road.rootElement,road,{left: "40rem"});
+            }],
+            [175,()=>{
+                new Bricks(road.rootElement,road,{left: "40rem"});
+            }],
+            [175,()=>{
+                new Bricks(road.rootElement,road,{left: "10rem"});
+            }],
+            // 
+            [175,()=>{
+                new Bricks(road.rootElement,road,{left: "30rem"});
+            }],
+            [175,()=>{
+                new Bricks(road.rootElement,road,{left: "50rem"});
+            }],
+            [175,()=>{
+                new Bricks(road.rootElement,road,{left: "0rem"});
+            }],
+            [175,()=>{
+                new Bricks(road.rootElement,road,{left: "20rem"});
+            }],
+            [175,()=>{
+                new Bricks(road.rootElement,road,{left: "10rem"});
+            }],
+            [175,()=>{
+                new Bricks(road.rootElement,road,{left: "40rem"});
+            }],
+            // now TWO bricks at once
+
+            [0,()=>{
+                new Bricks(road.rootElement,road,{left: "0rem"});
+                new Bricks(road.rootElement,road,{left: "50rem"});
+            }],
+            [550,()=>{
+                new Bricks(road.rootElement,road,{left: "10rem"});
+                new Bricks(road.rootElement,road,{left: "20rem"});
+                new Bricks(road.rootElement,road,{left: "30rem"});
+                new Bricks(road.rootElement,road,{left: "40rem"});
+            }],
+            [400,()=>{
+                new Bricks(road.rootElement,road,{left: "30rem"});
+            }],
+            [150,()=>{
+                new Bricks(road.rootElement,road,{left: "0rem"});
+            }],
+            [350,()=>{
+                new Bricks(road.rootElement,road,{left: "50rem"});
+                new Bricks(road.rootElement,road,{left: "20rem"});
+            }],
+            [350,()=>{
+                new Bricks(road.rootElement,road,{left: "40rem"});
+            }],
+            [350,()=>{
+                new Bricks(road.rootElement,road,{left: "10rem"});
+                new Bricks(road.rootElement,road,{left: "50rem"});
+            }],
+            [200,()=>{
+                new Bricks(road.rootElement,road,{left: "20rem"});
+                new Bricks(road.rootElement,road,{left: "40rem"});
+            }],
+            [0,()=>{
+                new Ammo(road.rootElement,road,5,{left:"calc(50% - 3rem)"});
+            }],
+            [175,()=>{
+                new Bricks(road.rootElement,road,{left: "20rem"});
+                new Bricks(road.rootElement,road,{left: "50rem"});
+            }],
+            [175,()=>{
+                new Bricks(road.rootElement,road,{left: "0rem"});
+                new Bricks(road.rootElement,road,{left: "30rem"});
+            }],
+            [175,()=>{
+                new Bricks(road.rootElement,road,{left: "50rem"});
+                new Bricks(road.rootElement,road,{left: "10rem"});
+            }],
+            [175,()=>{
+                new Bricks(road.rootElement,road,{left: "40rem"});
+            }],
+            [175,()=>{
+                new Bricks(road.rootElement,road,{left: "0rem"});
+            }],
+            [175,()=>{
+                new Bricks(road.rootElement,road,{left: "10rem"});
+                new Bricks(road.rootElement,road,{left: "50rem"});
+            }],
+            // 
+            [175,()=>{
+                new Bricks(road.rootElement,road,{left: "20rem"});
+                new Bricks(road.rootElement,road,{left: "0rem"});
+            }],
+            [175,()=>{
+                new Bricks(road.rootElement,road,{left: "50rem"});
+                new Bricks(road.rootElement,road,{left: "0rem"});
+            }],
+            [175,()=>{
+                new Bricks(road.rootElement,road,{left: "10rem"});
+                new Bricks(road.rootElement,road,{left: "20rem"});
+            }],
+            [175,()=>{
+                new Bricks(road.rootElement,road,{left: "40rem"});
+                new Bricks(road.rootElement,road,{left: "0rem"});
+
+            }],
+            [175,()=>{
+                new Bricks(road.rootElement,road,{left: "50rem"});
+                new Bricks(road.rootElement,road,{left: "10rem"});
+
+            }],
+            [175,()=>{
+                new Bricks(road.rootElement,road,{left: "20rem"});
+                new Bricks(road.rootElement,road,{left: "40rem"});
+
+            }],
+
+            
+
+
+
+
+        
           
         ]
 

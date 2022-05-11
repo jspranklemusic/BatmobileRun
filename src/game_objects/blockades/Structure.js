@@ -16,7 +16,6 @@ class Structure extends GameObject{
 
         let sizeDimensions ={ width: "40rem", height: "8rem", ...dimensions };
         let xPosition = coords ? coords : { right: "0px" }
-
         this.styleElement(root,{
             top: "-" + sizeDimensions.height,
             position: "absolute",
@@ -35,6 +34,7 @@ class Structure extends GameObject{
 
     moveStructure(road){
         setInterval(()=>{
+            if(this.game.paused) return;
             this.yPosition += road.speed;
             this.rootElement.style.transform = `translateY(${this.yPosition/10}rem)`
         },30)

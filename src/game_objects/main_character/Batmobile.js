@@ -70,6 +70,11 @@ class Batmobile extends GameObject{
         })
 
         GameObject.listen("keydown",e=>{
+            e.preventDefault();
+            if(e.keyCode == 27){
+                this.game.paused = !this.game.paused;
+            }
+            if(this.game.paused) return;
             if(!this.pressingKey){
                 if(e.keyCode == 37){
                     this.pressingKey = e.keyCode;
@@ -77,8 +82,6 @@ class Batmobile extends GameObject{
                 }else if(e.keyCode == 39){
                     this.pressingKey = e.keyCode;
                     this.move("right");
-                }else if(e.keyCode == 38){
-
                 }
             }
             if(e.shiftKey){
@@ -90,6 +93,7 @@ class Batmobile extends GameObject{
         })
 
         GameObject.listen("keyup",e=>{
+            if(this.game.paused) return;
             if(this.pressingKey == e.keyCode){
                 if(e.keyCode == 37){
                     this.move("left",true);
@@ -102,10 +106,12 @@ class Batmobile extends GameObject{
 
         
         const resumeRegularSpeed = ()=>{
-            if(this.slowdownInterval | this.stuck) return;
+
+            if(this.slowdownInterval | this.stuck | this.game.paused) return;
             clearInterval(this.accelerateInterval);
             this.accelerateInterval = null;
             this.slowdownInterval = setInterval(()=>{
+                if(this.game.paused) return;
                 if(this.stuck) return;
                 if(this.yPosition < 0){
                     this.yPosition += 2;
@@ -128,6 +134,7 @@ class Batmobile extends GameObject{
                 clearInterval(this.slowdownInterval);
                 this.slowdownInterval = null;
                 this.accelerateInterval = setInterval(()=>{
+                    if(this.game.paused) return;
                     if(this.stuck) return;
                     if(this.yPosition > -200){
                         this.yPosition -= 2;
@@ -167,6 +174,8 @@ class Batmobile extends GameObject{
 
     // move to the left or right
     move(direction = "left", clear = false){
+
+        if(this.game.paused) return;
   
         const directions = {
             left: -10,
@@ -175,6 +184,7 @@ class Batmobile extends GameObject{
         
         if(!this.moveInterval[direction]){
             this.moveInterval[direction] = setInterval(()=>{
+                if(this.game.paused) return;
                 const playerRect = this.rootElement.getBoundingClientRect();
                 const modifiedRect = {
                     top: playerRect.top,

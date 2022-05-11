@@ -66,12 +66,14 @@ class Road extends GameObject{
 
 
         GameObject.listen("keydown",e=>{
+            if(this.game.paused) return;
             if(e.keyCode == 38){
                 this.accelerate()
             }
         })
 
         GameObject.listen("keyup",e=>{
+            if(this.game.paused) return;
             if(e.keyCode == 38){
                 this.resumeRegularSpeed();
             }
@@ -85,9 +87,11 @@ class Road extends GameObject{
     }
 
     accelerate(){
+        if(this.game.paused) return;
         GameObject.emit("accelerate");
         let interval = 50
         const itvl = setInterval(()=>{
+            if(this.game.paused) return;
             if(this.speed >= 8){
                 this.speed = 8;
                 clearInterval(itvl);
@@ -99,6 +103,7 @@ class Road extends GameObject{
 
     moveLines(){
         setInterval(()=>{
+            if(this.game.paused) return;
             this.pixelsTraversed += (this.speed*1.5);
             GameObject.emit("pixels-traversed",this.pixelsTraversed );
             window.debug({pixelsTraversed: this.pixelsTraversed});
@@ -117,9 +122,11 @@ class Road extends GameObject{
     }
 
     resumeRegularSpeed(){
+        if(this.game.paused) return;
         GameObject.emit('resumeRegularSpeed')
 
         const itvl = setInterval(()=>{
+            if(this.game.paused) return;
             if(this.speed <= 4){
                 this.speed = 4;
                 clearInterval(itvl);

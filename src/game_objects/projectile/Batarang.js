@@ -50,12 +50,14 @@ class Batarang extends GameObject{
     }
 
     shootBatarang(){
+        if(this.game.paused) return;
         if(!this.shootInterval && !Batarang.shooting && Batarang.capacity > 0){
             Batarang.shooting = true;
             Batarang.capacity -= 1;
             window.changeAmmo(-1);
             window.debug({batarangs: Batarang.capacity})
             this.shootInterval = setInterval(()=>{
+                if(this.game.paused) return;
                 const rect = this.rootElement.getBoundingClientRect();
                 if(rect.bottom < 0){
                     clearInterval(this.shootInterval)

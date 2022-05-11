@@ -22,18 +22,19 @@ const P = styled.p`
 let mounted = false;
 let seconds = 0;
 
-class Game{
+export class Game{
 
     playerHealth = 100;
     ammoCount = 5;
-
+    static paused = false;
+    
     constructor(){
         this.root = document.getElementById("map");
         this.loadLevel();
     }
 
     loadLevel(){
-        this.level_1 = new level_1(this.root);
+        this.level_1 = new level_1(this.root,this);
     }
 }
 

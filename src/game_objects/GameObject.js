@@ -1,5 +1,6 @@
 import { collision_types } from "../game_container/CollisionListener";
 import CollisionListener from "../game_container/CollisionListener";
+import { Game } from "../game_container/GameContainer";
 
 const collisionListener = new CollisionListener;
 
@@ -21,6 +22,7 @@ class GameObject{
         this.rootElement = element
         this.rootId = Math.random().toString(36).slice(2);
         this.collision_type = collision_type;
+        this.game = Game;
         GameObject.activeObjects[this.rootId] = this;
         collisionListener.registerCollisionObject(this);
     }

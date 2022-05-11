@@ -22,15 +22,15 @@ class level_1{
         // Two values. 1. The distance from the previous position, 2. the function to run
         const startingPositions = [
             // only structures
-            // [0,()=>{
-            //     new Structure(road.rootElement,road,null,{left: "0px"});            
-            // }],
-            // [1000,()=>{
-            //     new Structure(road.rootElement,road);
-            // }],
-            // [750,()=>{
-            //     new Structure(road.rootElement,road,{width:"84%"},{left:"0px"});
-            // }],
+            [0,()=>{
+                new Structure(road.rootElement,road,null,{left: "0px"});            
+            }],
+            [1000,()=>{
+                new Structure(road.rootElement,road);
+            }],
+            [750,()=>{
+                new Structure(road.rootElement,road,{width:"84%"},{left:"0px"});
+            }],
             [750,()=>{
                 new Structure(road.rootElement,road,{width:"84%"},{right:"0px"});
             }],
@@ -327,7 +327,7 @@ class level_1{
             distanceLevels[currentPosition] = position[1];
         })
 
-        // const distanceLevels = {}
+        // distanceLevels[0] = ()=> new Ammo(road.rootElement,road,10);
 
         GameObject.on('pixels-traversed',(distanceFloat)=>{
             let distance = 50*Math.floor(distanceFloat/50);

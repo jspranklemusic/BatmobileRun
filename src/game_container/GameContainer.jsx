@@ -23,12 +23,12 @@ let mounted = false;
 let seconds = 0;
 
 class Game{
-    
+
     playerHealth = 100;
     ammoCount = 5;
 
     constructor(){
-        this.root = document.getElementById("map")
+        this.root = document.getElementById("map");
         this.loadLevel();
     }
 
@@ -41,6 +41,7 @@ class Game{
 const GameContainer = props =>{
     const [health, setHealth] = useState(100);
     const [ammo, setAmmo] = useState(0);
+    const [started, setStarted] = useState(false);
     const [debugVisible, setDebugVisible] = useState(true);
     const [debugState, setDebugState] = useState({
         xPosition: 0,
@@ -84,6 +85,7 @@ const GameContainer = props =>{
         }else{
             mounted = true; 
             window.game = new Game();
+            setStarted(true);
             setInterval(()=>{
                 seconds++;
                 window.debug({seconds})
@@ -92,6 +94,8 @@ const GameContainer = props =>{
     },[])
 
     return(
+        <>
+        
         <Map id="map">
             <MetricsHUD health={health} ammo={ammo}></MetricsHUD>
           {debugVisible && <ul>
@@ -100,6 +104,7 @@ const GameContainer = props =>{
                 </P>
             </ul>}
         </Map>
+        </>
     )
 }
 

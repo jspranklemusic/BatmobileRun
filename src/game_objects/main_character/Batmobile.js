@@ -83,8 +83,8 @@ class Batmobile extends GameObject{
             }
             if(e.shiftKey){
                 let curPos = this.rootElement.getBoundingClientRect()
-                let left = curPos.left - parent.offsetWidth/2 - this.rootElement.offsetWidth*0.85
                 let top = curPos.top;
+                let left = this.xPosition + 250 + (35);
                 new Batarang(parent,left,top);
             }
         })

@@ -79,6 +79,10 @@ class Road extends GameObject{
             }
         })
 
+        GameObject.on("unpause",()=>{
+            this.resumeRegularSpeed();
+        })
+
         parent.appendChild(this.road);
     }
 

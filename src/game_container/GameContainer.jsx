@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import styled from 'styled-components'
 import level_1 from "../levels/level_1";
 import Batarang from "../game_objects/projectile/Batarang";
+import GameObject from "../game_objects/GameObject";
 import MetricsHUD from "./MetricsHUD";
+import Menu from "./Menu";
 
 const Map = styled.div`
     width: 100vw;
@@ -43,6 +45,8 @@ const GameContainer = props =>{
     const [health, setHealth] = useState(100);
     const [ammo, setAmmo] = useState(0);
     const [started, setStarted] = useState(false);
+    const [menuStyle, setMenuStyle] = useState({display:"none"});
+    const [menuVisible, setMenuVisible] = useState(false);
     const [debugVisible, setDebugVisible] = useState(true);
     const [debugState, setDebugState] = useState({
         xPosition: 0,
@@ -91,19 +95,36 @@ const GameContainer = props =>{
                 seconds++;
                 window.debug({seconds})
             },1000)
+            GameObject.on("pause",()=>setMenuVisible(true));
+            GameObject.on("unpause",()=>setMenuVisible(false));
         }
     },[])
 
+    useEffect(()=>{
+        if(!mounted) return;
+        if(menuVisible){
+            setMenuStyle({display: "flex",animation:"fadein 0.3s backwards"});
+        }else{
+            setMenuStyle({display: "flex",animation:"fadeout 0.3s forwards"});
+            setTimeout(()=>{
+                setMenuStyle({display:"none"});
+            },300)
+        }
+    },[menuVisible])
+
+
+
     return(
         <>
-        
+         <Menu style={menuStyle}/>
         <Map id="map">
+           
             <MetricsHUD health={health} ammo={ammo}></MetricsHUD>
-          {debugVisible && <ul>
-                <P>
-                    {Object.keys(debugState).map(key=><li>{key}: {debugState[key]}</li>)}
-                </P>
-            </ul>}
+            {debugVisible && <ul>
+                    <P>
+                        {Object.keys(debugState).map(key=><li>{key}: {debugState[key]}</li>)}
+                    </P>
+                </ul>}
         </Map>
         </>
     )

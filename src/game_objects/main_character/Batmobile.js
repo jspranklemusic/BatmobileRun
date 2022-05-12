@@ -73,9 +73,15 @@ class Batmobile extends GameObject{
             e.preventDefault();
             if(e.keyCode == 27){
                 this.game.paused = !this.game.paused;
+                if(!this.game.paused){
+                    GameObject.emit("unpause")
+                }
             }
-            if(this.game.paused) return;
-            if(!this.pressingKey){
+            if(this.game.paused){
+                GameObject.emit("pause")
+                return;
+            }
+            // if(!this.pressingKey){
                 if(e.keyCode == 37){
                     this.pressingKey = e.keyCode;
                     this.move("left");
@@ -83,7 +89,7 @@ class Batmobile extends GameObject{
                     this.pressingKey = e.keyCode;
                     this.move("right");
                 }
-            }
+            // }
             if(e.shiftKey){
                 let curPos = this.rootElement.getBoundingClientRect()
                 let top = curPos.top;
@@ -92,13 +98,15 @@ class Batmobile extends GameObject{
             }
         })
 
+       
+
         GameObject.listen("keyup",e=>{
             if(this.game.paused) return;
             if(this.pressingKey == e.keyCode){
                 if(e.keyCode == 37){
-                    this.move("left",true);
+                    this.cancelMove();
                 }else if(e.keyCode == 39){
-                    this.move("right",true);
+                    this.cancelMove();
                 }
                 this.pressingKey = null
             }
@@ -106,10 +114,12 @@ class Batmobile extends GameObject{
 
         
         const resumeRegularSpeed = ()=>{
-
-            if(this.slowdownInterval | this.stuck | this.game.paused) return;
+            console.log("resuming")
+            if(this.slowdownInterval | this.stuck) return;
             clearInterval(this.accelerateInterval);
             this.accelerateInterval = null;
+            console.log("regular speed")
+
             this.slowdownInterval = setInterval(()=>{
                 if(this.game.paused) return;
                 if(this.stuck) return;
@@ -162,10 +172,16 @@ class Batmobile extends GameObject{
             setTimeout(()=>{
                 this.stuck = false;
                 resumeRegularSpeed();
-            },60)
+            },30)
 
-        })
-   
+        });
+
+
+         // after pausing, reset player controls back to default
+         GameObject.on("unpause",()=>{
+            this.cancelMove();
+            clearInterval(this.accelerateInterval);
+          })
 
        parent.appendChild(wrapper);
     }
@@ -173,9 +189,7 @@ class Batmobile extends GameObject{
 
 
     // move to the left or right
-    move(direction = "left", clear = false){
-
-        if(this.game.paused) return;
+    move(direction = "left"){
   
         const directions = {
             left: -10,
@@ -183,6 +197,16 @@ class Batmobile extends GameObject{
         }
         
         if(!this.moveInterval[direction]){
+            let opposite;
+            if(direction == "left"){
+                opposite = "right"
+            }else{
+                opposite = "left";
+            }
+            clearInterval(this.moveInterval[opposite]);
+            this.moveInterval[opposite] = null;
+
+
             this.moveInterval[direction] = setInterval(()=>{
                 if(this.game.paused) return;
                 const playerRect = this.rootElement.getBoundingClientRect();
@@ -212,17 +236,18 @@ class Batmobile extends GameObject{
                 window.setDebugState({...window.debugState, xPosition: this.xPosition})
             },30)
 
-        }else if(clear){
-            clearInterval(this.moveInterval[direction]);
-            this.moveInterval[direction] = null;
-            this.svgTransform.rotateZ = 0
-            this.svg.style.transform = `
-                rotateZ(${this.svgTransform.rotateZ}deg)
-                `
         }
     }
 
-  
+    cancelMove(){
+        clearInterval(this.moveInterval.left);
+        clearInterval(this.moveInterval.right);
+        this.moveInterval={left: null, right: null};
+        this.svgTransform.rotateZ = 0
+        this.svg.style.transform = `
+            rotateZ(${this.svgTransform.rotateZ}deg)
+            `
+    }
 
   
 }

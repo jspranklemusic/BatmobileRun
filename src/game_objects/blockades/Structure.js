@@ -34,7 +34,7 @@ class Structure extends GameObject{
 
     moveStructure(road){
         setInterval(()=>{
-            if(this.game.paused) return;
+            if(this.game.stoppedState) return;
             this.yPosition += road.speed;
             this.rootElement.style.transform = `translateY(${this.yPosition/10}rem)`
         },30)

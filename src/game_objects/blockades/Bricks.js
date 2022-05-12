@@ -87,7 +87,7 @@ class Bricks extends GameObject{
     
     moveBrick(){
         setInterval(()=>{
-            if(this.game.paused) return;
+            if(this.game.stoppedState) return;
             this.yPosition += this.road.speed
             this.brick.style.transform = `translateY(${this.yPosition/10}rem) scale(${this.scale})`
             if(this.rootElement.getBoundingClientRect().top > window.innerHeight){

@@ -1,4 +1,5 @@
 import GameObject from "../GameObject";
+import { Game } from "../../game_container/GameContainer";
 import car_svg from "../../images/car_topview.svg";
 import batman_logo from "../../images/bat-silhouette.png";
 import { collision_types } from "../../game_container/CollisionListener";
@@ -70,17 +71,7 @@ class Batmobile extends GameObject{
         })
 
         GameObject.listen("keydown",e=>{
-            e.preventDefault();
-            if(e.keyCode == 27){
-                this.game.paused = !this.game.paused;
-                if(!this.game.paused){
-                    GameObject.emit("unpause")
-                }
-            }
-            if(this.game.paused){
-                GameObject.emit("pause")
-                return;
-            }
+            if(this.game.stoppedState) return;
             // if(!this.pressingKey){
                 if(e.keyCode == 37){
                     this.pressingKey = e.keyCode;
@@ -101,7 +92,7 @@ class Batmobile extends GameObject{
        
 
         GameObject.listen("keyup",e=>{
-            if(this.game.paused) return;
+            if(this.game.stoppedState) return;
             if(this.pressingKey == e.keyCode){
                 if(e.keyCode == 37){
                     this.cancelMove();
@@ -114,22 +105,21 @@ class Batmobile extends GameObject{
 
         
         const resumeRegularSpeed = ()=>{
-            console.log("resuming")
             if(this.slowdownInterval | this.stuck) return;
             clearInterval(this.accelerateInterval);
             this.accelerateInterval = null;
-            console.log("regular speed")
 
             this.slowdownInterval = setInterval(()=>{
-                if(this.game.paused) return;
-                if(this.stuck) return;
-                if(this.yPosition < 0){
+                if(!!this.game.stoppedState | this.stuck | !this.slowdownInterval) return;
+                console.log(this.yPosition,this.game.stoppedState)
+                if(this.yPosition < -2){
                     this.yPosition += 2;
                     this.rootElement.style.transform = `translateX(${this.xPosition/10}rem) translateY(${this.yPosition/10}rem)`
-                }else if(this.yPosition > 0){
+                }else if(this.yPosition > 2){
                     this.yPosition -= 2;
                     this.rootElement.style.transform = `translateX(${this.xPosition/10}rem) translateY(${this.yPosition/10}rem)`
                 }else{
+                    this.yPosition = 0;
                     this.rootElement.style.transform = `translateX(${this.xPosition/10}rem) translateY(${this.yPosition/10}rem)`;
                     clearInterval(this.slowdownInterval);
                     this.slowdownInterval = null;
@@ -144,7 +134,7 @@ class Batmobile extends GameObject{
                 clearInterval(this.slowdownInterval);
                 this.slowdownInterval = null;
                 this.accelerateInterval = setInterval(()=>{
-                    if(this.game.paused) return;
+                    if(this.game.stoppedState) return;
                     if(this.stuck) return;
                     if(this.yPosition > -200){
                         this.yPosition -= 2;
@@ -177,15 +167,34 @@ class Batmobile extends GameObject{
         });
 
 
-         // after pausing, reset player controls back to default
-         GameObject.on("unpause",()=>{
+        // after pausing, reset player controls back to default
+        Game.on("unpause",()=>{
             this.cancelMove();
             clearInterval(this.accelerateInterval);
-          })
+            this.accelerateInterval = null;
+        })
+
+
+        Game.on("death",()=>{
+            this.cancelMove();
+            clearInterval(this.accelerateInterval);
+            clearInterval(this.slowdownInterval);
+            this.accelerateInterval = null;
+            this.slowdownInterval = null;
+        })
 
        parent.appendChild(wrapper);
     }
     
+
+    onDestroy(){
+        return new Promise(resolve=>{
+            this.cancelMove();
+            clearInterval(this.accelerateInterval);
+            clearInterval(this.slowdownInterval);
+            resolve("deleting object",this.rootId)
+        })
+    }
 
 
     // move to the left or right
@@ -208,7 +217,7 @@ class Batmobile extends GameObject{
 
 
             this.moveInterval[direction] = setInterval(()=>{
-                if(this.game.paused) return;
+                if(this.game.stoppedState) return;
                 const playerRect = this.rootElement.getBoundingClientRect();
                 const modifiedRect = {
                     top: playerRect.top,

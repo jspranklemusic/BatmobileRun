@@ -1,4 +1,5 @@
 import GameObject from "../game_objects/GameObject";
+import { Game } from "./GameContainer";
 
 export const collision_types = {
     player: "player",
@@ -65,11 +66,11 @@ class CollisionListener{
                         powerup.destroy();
                     }
                 })
-
+                
                 // check to see if car is out of map
                 if(playerRect.top > window.innerHeight){
-                    alert("YOU LOSE!");
                     clearInterval(this.interval)
+                    Game.emit("death")
                 }
             }
         },30)
@@ -136,6 +137,12 @@ class CollisionListener{
         let index = CollisionListener.collisionObjects[type].findIndex(obj=>obj.rootId == rootId);
         if (index < 0) return;
         CollisionListener.collisionObjects[type].splice(index,1);
+    }
+
+    static reset(){
+        clearInterval(this.interval);
+        CollisionListener.collisionObjects = {}
+        console.log(this);
     }
 
     registerCollisionObject(object){

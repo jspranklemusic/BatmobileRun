@@ -40,7 +40,7 @@ class Ammo extends GameObject{
 
         this.capacity = capacity;
         this.moveInterval = setInterval(()=>{
-            if(this.game.paused) return;
+            if(this.game.stoppedState) return;
             const rect = this.rootElement.getBoundingClientRect();
             if(rect.top < window.innerHeight){
                 this.top += road.speed;

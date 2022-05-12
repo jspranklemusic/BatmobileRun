@@ -7,6 +7,7 @@ import Health from '../game_objects/power_ups/Health'
 import Bomb from "../game_objects/blockades/Bomb";
 import Structure from "../game_objects/blockades/Structure";
 import GameObject from "../game_objects/GameObject";
+import { Game } from "../game_container/GameContainer";
 
 class level_1{
     constructor(root){
@@ -329,7 +330,7 @@ class level_1{
 
         // distanceLevels[0] = ()=> new Ammo(road.rootElement,road,10);
 
-        GameObject.on('pixels-traversed',(distanceFloat)=>{
+        this.index = GameObject.on('pixels-traversed',(distanceFloat)=>{
             let distance = 50*Math.floor(distanceFloat/50);
             if(distanceLevels[distance]){
                 distanceLevels[distance]();
@@ -338,8 +339,14 @@ class level_1{
         })
 
 
-        
+    }
 
+    destroy(){
+        console.log(this.index);
+        console.log(GameObject.emitters);
+        // GameObject.unregisterEvent('pixels-traversed',this.index);
+      
+    
     }
 }
 

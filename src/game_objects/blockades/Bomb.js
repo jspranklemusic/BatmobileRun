@@ -72,7 +72,7 @@ class Bomb extends GameObject{
 
     moveBomb(){
         setInterval(()=>{
-            if(this.game.paused) return;
+            if(this.game.stoppedState) return;
             this.yPosition += this.fast ? this.road.speed/5 : this.road.speed/10;
             this.rootElement.style.transform = `translateY(${this.yPosition}rem)`;
             if(this.rootElement.getBoundingClientRect().top > window.innerHeight){

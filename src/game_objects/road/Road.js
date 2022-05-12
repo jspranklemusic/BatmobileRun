@@ -1,4 +1,5 @@
 import GameObject from "../GameObject";
+import { Game } from "../../game_container/GameContainer";
 import road_bg from '../../images/road.png'
 
 class Road extends GameObject{
@@ -7,6 +8,7 @@ class Road extends GameObject{
     height = 600;
     pixelsTraversed = 0;
     yPosition = 0;
+    name = 'Road'
     
 
     // what should a map be? how many road units?
@@ -43,100 +45,90 @@ class Road extends GameObject{
             document.querySelector("html").style.fontSize = `${10*(window.innerWidth/this.width)}px`;
         }
 
-        // lines
-        // const lineStyle = {
-        //     width: "1.5rem",
-        //     height: "3rem",
-        //     position: "absolute",
-        //     left: "calc(50% - 0.75rem)",
-        //     background: "white"
-        // }
-        // for(let i = 0; i < 15; i++){
-        //     const line = document.createElement("div");
-        //     let offset = ((i*60) - 60 )/10;
-        //     line.style.top = 0;
-        //     line.setAttribute("transform",offset)
-        //     line.style.transform = `translateY(${offset}rem)`;
-        //     line.classList.add("road-line")
-        //     this.styleElement(line, lineStyle);
-        //     this.road.appendChild(line)
-        // }
-
         this.moveLines();
 
-
         GameObject.listen("keydown",e=>{
-            if(this.game.paused) return;
+            if(this.game.stoppedState) return;
             if(e.keyCode == 38){
                 this.accelerate()
             }
         })
 
         GameObject.listen("keyup",e=>{
-            if(this.game.paused) return;
+            if(this.game.stoppedState) return;
             if(e.keyCode == 38){
                 this.resumeRegularSpeed();
             }
         })
 
-        GameObject.on("unpause",()=>{
+        Game.on("unpause",()=>{
             this.resumeRegularSpeed();
         })
 
         parent.appendChild(this.road);
     }
 
-    destroy(){
-        this.parent.road.destroy();
-    }
-
     accelerate(){
-        if(this.game.paused) return;
+        if(this.game.stoppedState | this.accelerateInterval) return;
         GameObject.emit("accelerate");
         let interval = 50
-        const itvl = setInterval(()=>{
-            if(this.game.paused) return;
-            if(this.speed >= 8){
+        this.accelerateInterval = setInterval(()=>{
+            if(this.game.stoppedState) return;
+            if(this.speed > 8){
+                
                 this.speed = 8;
-                clearInterval(itvl);
+                clearInterval(this.accelerateInterval);
+                this.accelerateInterval = null;
                 return;
             }
             this.speed *= 1.1;
+            window.debug({speed: this.speed});
+         
+
         },interval)
     }
 
+
+
     moveLines(){
-        setInterval(()=>{
-            if(this.game.paused) return;
+        this.moveLinesInterval = setInterval(()=>{
+            if(this.game.stoppedState) return;
             this.pixelsTraversed += (this.speed*1.5);
             GameObject.emit("pixels-traversed",this.pixelsTraversed );
             window.debug({pixelsTraversed: this.pixelsTraversed});
-
-            // document.querySelectorAll(".road-line").forEach((line,i) => {
-            //     let diff = parseFloat(line.getAttribute("transform")) + (this.speed/10);
-            //     if((diff*10) - 60 >= window.innerHeight){
-            //         diff = -6;
-            //     }
-            //     line.setAttribute("transform",diff)
-            //     line.style.transform = `translateY(${diff}rem)`;
-            // })
             this.yPosition += (this.speed);
             this.rootElement.style.backgroundPositionY = `${this.yPosition/10}rem`
         },30)
     }
 
+    onDestroy(){
+        return new Promise(resolve=>{
+            clearInterval(this.slowdownInterval);
+            clearInterval(this.accelerateInterval);
+            clearInterval(this.moveLinesInterval);
+            this.slowdownInterval = null;
+            this.accelerateInterval = null;
+            this.moveLinesInterval = null;
+            delete this;
+            resolve();
+        })
+    }
+
     resumeRegularSpeed(){
-        if(this.game.paused) return;
+        if(this.game.stoppedState | this.slowdownInterval) return;
         GameObject.emit('resumeRegularSpeed')
 
-        const itvl = setInterval(()=>{
-            if(this.game.paused) return;
-            if(this.speed <= 4){
+        this.slowdownInterval = setInterval(()=>{
+            if(this.game.stoppedState) return;
+            if(this.speed < 4){
                 this.speed = 4;
-                clearInterval(itvl);
+                window.debug({speed: this.speed});
+                clearInterval(this.slowdownInterval);
+                this.slowdownInterval = null;
                 return;
             }
             this.speed *= 0.95;
+            window.debug({speed: this.speed});
         },50)
     }
 

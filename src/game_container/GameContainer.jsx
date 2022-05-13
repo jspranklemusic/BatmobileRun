@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import menuTypes from "./menuTypes";
 import styled from 'styled-components'
 import level_1 from "../levels/level_1";
+import levels from "../levels/Levels";
 import Batarang from "../game_objects/projectile/Batarang";
 import GameObject from "../game_objects/GameObject";
 import CollisionListener from "./CollisionListener";
@@ -8,11 +10,7 @@ import MetricsHUD from "./MetricsHUD";
 import Menu from "./Menu";
 import Emitter from "./Emitter";
 
-const menuTypes = {
-    pause:"pause",
-    death:"death",
-    start:"start"
-}
+
 
 const Map = styled.div`
     width: 100vw;
@@ -36,6 +34,7 @@ export class Game extends Emitter{
 
     playerHealth = 100;
     ammoCount = 5;
+    currentLevelIndex = 0;
     static paused = false;
     static death = false;
     static stoppedState = null;
@@ -81,7 +80,7 @@ export class Game extends Emitter{
     }
 
     loadLevel(){
-        this.level = new level_1(this.root,this);
+        this.level = new levels[this.currentLevelIndex](this.root);
     }
     clearLevel(){
         this.props.setStarted(false);
@@ -182,14 +181,9 @@ const GameContainer = props =>{
         }
     },[])
 
-    // useEffect(()=>{
-    //     if(!mounted) return;
-    //     if(menuVisible){
-    //         setMenuStyle({animation:"fadein 0.3s"});
-    //     }else{
-    //         setMenuStyle({animation:"fadeout 0.3s forwards"});
-    //     }
-    // },[menuVisible])
+    const exitGamePlay = ()=>{
+        setMenuType(menuTypes.levelSelect);
+    }
 
     const resume = ()=>{
         Game.paused = false;
@@ -204,11 +198,10 @@ const GameContainer = props =>{
     }
 
 
-
     return(
         <>
-        {menuVisible && <Menu type={menuType} restart={restart} resume={resume} style={menuStyle}/>}
-        {started && <Map id="map">
+        {menuVisible && <Menu type={menuType} quit={exitGamePlay} restart={restart} resume={resume} style={menuStyle}/>}
+        {(started && menuType != menuTypes.levelSelect)  && <Map id="map">
            
             <MetricsHUD health={health} ammo={ammo}></MetricsHUD>
             {debugVisible && <ul>

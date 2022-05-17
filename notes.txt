@@ -1,3 +1,7 @@
-todo next:
+Things to add:
 
-I should make the Bat logo turn yellow when at full batarang capacity, and then gradually get lower
+1. Finish line
+2. parent menu that loads levels
+3. In-game dialogs: "Press Shift to fire, arrow keys to move, etc."
+4. More objects and structures, possibly ones with themes. Maybe traffic cones or ice?
+5. Starting in level 2, add the concept of an enemy

@@ -1,5 +1,11 @@
+// import { pointTypes } from "../game_objects/achievement_points/AchievementPoint";
 import GameObject from "../game_objects/GameObject";
 import { Game } from "./GameContainer";
+
+export const pointTypes = {
+    finish_line: "finish_line",
+    save_line: "save_line"
+}
 
 export const collision_types = {
     player: "player",
@@ -8,7 +14,8 @@ export const collision_types = {
     projectile: "projectile",
     powerup: "powerup",
     enemy: "enemy",
-    none: "none"
+    none: "none",
+    achievement_point: "achievement_point"
 }
 
 class CollisionListener{
@@ -45,6 +52,18 @@ class CollisionListener{
 
                 })
 
+                CollisionListener.collisionObjects.achievement_point.forEach(point=>{
+                    const pointRect = point.rootElement.getBoundingClientRect();
+                    if(CollisionListener.isCollision(playerRect,pointRect)){
+                        if(point.pointType === pointTypes.finish_line){
+                            Game.emit("level-completion")
+                        }else if(point.pointType = pointTypes.save_line){
+                            Game.emit("checkpoint")
+                        }
+                    }
+                })
+
+                
                 CollisionListener.collisionObjects.indestructible.forEach(object=>{
                     const objectRect = object.rootElement.getBoundingClientRect();
                     // player is bumping into left

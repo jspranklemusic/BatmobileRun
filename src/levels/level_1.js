@@ -8,6 +8,8 @@ import Bomb from "../game_objects/blockades/Bomb";
 import Structure from "../game_objects/blockades/Structure";
 import GameObject from "../game_objects/GameObject";
 import { Game } from "../game_container/GameContainer";
+import { pointTypes } from "../game_container/CollisionListener";
+import AchievementPoint from "../game_objects/achievement_points/AchievementPoint";
 
 class level_1{
     constructor(root){
@@ -313,13 +315,9 @@ class level_1{
                 new Bricks(road.rootElement,road,{left: "40rem"});
 
             }],
-
-            
-
-
-
-
-        
+            [500,()=>{
+                new AchievementPoint(road.rootElement,road,pointTypes.finish_line);
+            }]
           
         ]
 

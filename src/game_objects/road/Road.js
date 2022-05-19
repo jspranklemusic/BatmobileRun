@@ -109,8 +109,7 @@ class Road extends GameObject{
             this.slowdownInterval = null;
             this.accelerateInterval = null;
             this.moveLinesInterval = null;
-            delete this;
-            resolve();
+            resolve("deleting road");
         })
     }
 

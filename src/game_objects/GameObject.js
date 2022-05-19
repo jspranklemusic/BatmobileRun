@@ -51,7 +51,6 @@ class GameObject extends Emitter{
         
         delete GameObject.activeObjects[this.rootId];
         this.rootElement.remove();
-        delete this;
     }
 
     static getGameObject(id){

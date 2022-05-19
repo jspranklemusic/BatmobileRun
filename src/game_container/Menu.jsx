@@ -4,11 +4,13 @@ import menuTypes from "./menuTypes";
 import PauseMenu from "./submenus/PauseMenu";
 import DeathMenu from "./submenus/DeathMenu";
 import LevelSelectMenu from "./submenus/LevelSelectMenu";
+import LevelCompletionMenu from "./submenus/LevelCompletionMenu";
 
 const menuMap = {
     [menuTypes.death] : DeathMenu,
     [menuTypes.pause] : PauseMenu,
-    [menuTypes.levelSelect] : LevelSelectMenu
+    [menuTypes.levelSelect] : LevelSelectMenu,
+    [menuTypes.levelCompletion] : LevelCompletionMenu
 }
 
 const Menu = props => {

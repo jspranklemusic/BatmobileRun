@@ -47,6 +47,14 @@ export class Game extends Emitter{
         this.root = document.getElementById("map");
         this.loadLevel();
 
+        Game.on("checkpoint",()=>{
+        })
+
+        Game.on("level-completion",()=>{
+            Game.paused = true;
+            Game.stoppedState = "level-completion"
+        })
+
         Game.on("pause",()=>{
             Game.paused = true;
             Game.stoppedState = "paused"
@@ -89,6 +97,7 @@ export class Game extends Emitter{
 }
 
 
+
 const GameContainer = props =>{
     const [health, setHealth] = useState(100);
     const [ammo, setAmmo] = useState(0);
@@ -107,6 +116,7 @@ const GameContainer = props =>{
 
     window.setDebugState = setDebugState;
     window.debugState = debugState;
+
     window.debug = function(obj){
         window.setDebugState({...window.debugState, ...obj})
     }
@@ -115,7 +125,6 @@ const GameContainer = props =>{
         delete obj[key];
         setDebugState(obj);
     }
-
     window.changeHealth = function(amt){
         // amt can be positive or negative;
         let currentHealth = health + amt;
@@ -126,7 +135,6 @@ const GameContainer = props =>{
             Game.emit("death")
         }
     }
-
     window.changeAmmo = function(amt){
         // amt can be positive or negative;
         let currentAmmo = ammo;
@@ -135,13 +143,12 @@ const GameContainer = props =>{
         setAmmo(currentAmmo + amt);
     }
     
-
     useEffect(()=>{
         if(mounted){
             return;
         }else{
+            // set global functions that can be called from anywhere in the app
             mounted = true; 
-           
             setTimeout(()=>{
                 window.game = new Game({
                     setStarted,
@@ -152,19 +159,9 @@ const GameContainer = props =>{
                 seconds++;
                 window.debug({seconds})
             },1000)
-           
-            const resetMenu = ()=>{
-                setMenuStyle({animation:"fadeout 0.3s forwards"});
-                setTimeout(()=>{
-                    setMenuVisible(false);
-                    setMenuType(null);
-                },300);
-            }
             // pause listeners
             Game.on("pause",()=>{
-                setMenuType(menuTypes.pause);
-                setMenuStyle({});
-                setMenuVisible(true);
+                showMenu(menuTypes.pause)
             });
             Game.on("unpause",()=>{
                resetMenu();
@@ -174,9 +171,10 @@ const GameContainer = props =>{
              });
             // death listener
             Game.on("death",()=>{                
-                setMenuType(menuTypes.death);
-                setMenuStyle({});
-                setMenuVisible(true);
+                showMenu(menuTypes.death)
+            })
+            Game.on("level-completion",()=>{
+                showMenu(menuTypes.levelCompletion)
             })
         }
     },[])
@@ -195,6 +193,20 @@ const GameContainer = props =>{
         setHealth(100);
         setAmmo(0);
         Game.emit("restart")
+    }
+
+    const showMenu = (type)=>{
+        setMenuType(type);
+        setMenuStyle({});
+        setMenuVisible(true);
+    }
+
+    const resetMenu = ()=>{
+        setMenuStyle({animation:"fadeout 0.3s forwards"});
+        setTimeout(()=>{
+            setMenuVisible(false);
+            setMenuType(null);
+        },300);
     }
 
 

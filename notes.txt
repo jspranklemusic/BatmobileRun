@@ -5,3 +5,10 @@ Things to add:
 3. In-game dialogs: "Press Shift to fire, arrow keys to move, etc."
 4. More objects and structures, possibly ones with themes. Maybe traffic cones or ice?
 5. Starting in level 2, add the concept of an enemy
+
+Ok, GameObject and Game can both emit things and listen to things. Here is (possibly) how I will differentiate.
+
+Game will listen for global events that directly impact the level, removing the level, or changing the level.
+i.e. pause, death, completion, restart
+
+GameObject event emitters deal with interactions between active objects in a game level.

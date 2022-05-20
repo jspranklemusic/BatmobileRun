@@ -107,14 +107,12 @@ export class Game extends Emitter{
     }
 
     loadLevel(){
-        if(this.currentLevelIndex === 0){
-            Game.accelerateDisabled = true;
-            Game.moveDisabled = true;
-        }else{
-            setTimeout(()=>{
-                this.props.setShowHealthAndAmmo(true);
-            },2000)
-        }
+        setTimeout(()=>{
+            this.props.setShowHealthAndAmmo(true);
+        },2000)
+        Game.accelerateDisabled = false;
+        Game.moveDisabled = false;
+
         this.level = new levels[this.currentLevelIndex](this.root);
      
     }

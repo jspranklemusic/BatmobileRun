@@ -16,11 +16,14 @@ class level_0{
         const collisionListener = new CollisionListener;
         const road = new Road(root);
         const batmobile = new Batmobile(road.rootElement,road);
-        // const bricks = new Bricks(road.rootElement,road);
-        // const ammo = new Ammo(road.rootElement,road);
-        // const bomb = new Bomb(road.rootElement,road)
+        Game.accelerateDisabled = true;
+        Game.moveDisabled = true;
         const distanceLevels = {};
         let currentPosition = 0;
+
+        setTimeout(()=>{
+            Game.emit("toggle-h&a",false)
+        },2000)
 
         // Two values. 1. The distance from the previous position, 2. the function to run
         const startingPositions = [
@@ -39,6 +42,10 @@ class level_0{
                 `)
             }],
             [1500,()=>{
+                Game.emit("new-dialog",
+                `To pause the game at any time, press "ESC".`)
+            }],
+            [600,()=>{
                 Game.emit("new-dialog",
                 `To move, use the left and right arrow keys.`
                 )
@@ -118,10 +125,6 @@ class level_0{
             }],
             [500,()=>{
                 new Structure(road.rootElement,road,null,{left: "0px"});       
-            }],
-            [600,()=>{
-                Game.emit("new-dialog",
-                `To pause the game at any time, press "ESC".`)
             }],
             [1200,()=>{
                 Game.emit("new-dialog",

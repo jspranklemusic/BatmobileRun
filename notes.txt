@@ -2,10 +2,10 @@ Things to add:
 
 1. Finish line - DONE
 2. parent menu that loads levels
-3. In-game dialogs: "Press Shift to fire, arrow keys to move, etc."
+3. In-game dialogs: "Press Shift to fire, arrow keys to move, etc." - DONE
 4. More objects and structures, possibly ones with themes. Maybe traffic cones or ice?
 5. Starting in level 2, add the concept of an enemy
-6. "level 0" : a short, easy walkthrough level that introduces basic concepts and uses the in-game toast dialogs
+6. "level 0" : a short, easy walkthrough level that introduces basic concepts and uses the in-game toast dialogs - DONE
 7. add ending animation for level completion
 
 Ok, GameObject and Game can both emit things and listen to things. Here is (possibly) how I will differentiate.
@@ -15,3 +15,5 @@ i.e. pause, death, level-completion, restart
 
 GameObject event emitters deal with interactions between active objects in a game level. i.e. accelerate, hit,
 lower health, etc
+
+

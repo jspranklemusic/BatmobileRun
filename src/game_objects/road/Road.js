@@ -69,7 +69,7 @@ class Road extends GameObject{
     }
 
     accelerate(){
-        if(this.game.stoppedState | this.accelerateInterval) return;
+        if(this.game.stoppedState | this.accelerateInterval | this.game.accelerateDisabled) return;
         GameObject.emit("accelerate");
         let interval = 50
         this.accelerateInterval = setInterval(()=>{

@@ -26,7 +26,8 @@ class level_1{
         const startingPositions = [
             // only structures
             [0,()=>{
-                new Structure(road.rootElement,road,null,{left: "0px"});            
+                new Structure(road.rootElement,road,null,{left: "0px"});     
+                Game.emit("new-dialog","Level 1")       
             }],
             [1000,()=>{
                 new Structure(road.rootElement,road);

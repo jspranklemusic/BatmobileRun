@@ -28,12 +28,19 @@ export const MenuContainer = styled.div`
     h1{
         text-align: center;
         border-bottom: 1px solid rgba(255,255,255,0.5);
-        padding: 2rem 0;
+        padding: 1.5rem 0;
         width: 90%;
         margin: auto;
         flex: 0;
         font-size: 3rem;
         text-transform: uppercase;
+        font-weight: 900;
+    }
+    h2{
+        text-align: center;
+        padding-top: 2rem;
+        margin: 0 auto;
+        margin-bottom: -1rem;
         font-weight: 900;
     }
     .middle{

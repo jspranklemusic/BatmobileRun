@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import menuTypes from "./menuTypes";
 import styled from 'styled-components'
-import level_1 from "../levels/level_1";
 import levels from "../levels/Levels";
 import Batarang from "../game_objects/projectile/Batarang";
 import GameObject from "../game_objects/GameObject";
@@ -9,7 +8,6 @@ import CollisionListener from "./CollisionListener";
 import MetricsHUD from "./MetricsHUD";
 import Menu from "./Menu";
 import Emitter from "./Emitter";
-
 
 
 const Map = styled.div`
@@ -40,6 +38,8 @@ export class Game extends Emitter{
     static stoppedState = null;
     static listeners = {}
     static emitters = {}
+    static moveDisabled = false;
+    static accelerateDisabled = false;
     
     constructor(props){
         super();
@@ -55,6 +55,15 @@ export class Game extends Emitter{
             Game.stoppedState = "level-completion"
         })
 
+        Game.on('toggle-h&a',state=>{
+            this.props.setShowHealthAndAmmo(state)
+        })
+
+        Game.on("new-dialog",(text)=>{
+            console.log(text,this.props);
+            this.props.setDialogText(text);
+        })
+
         Game.on("pause",()=>{
             Game.paused = true;
             Game.stoppedState = "paused"
@@ -68,6 +77,10 @@ export class Game extends Emitter{
             Game.stoppedState = "death";
         })
         Game.on("restart",()=>{
+            window.changeAmmo(-100);
+            window.changeHealth(100);
+            this.props.setShowHealthAndAmmo(false)
+            Game.emit("toggke")
             Game.death = false;
             Game.stoppedState = null;
             GameObject.reset();
@@ -87,8 +100,23 @@ export class Game extends Emitter{
         })
     }
 
+    nextLevel(){
+        this.currentLevelIndex++;
+        this.props.setLevel(this.currentLevelIndex);
+        Game.emit("restart");
+    }
+
     loadLevel(){
+        if(this.currentLevelIndex === 0){
+            Game.accelerateDisabled = true;
+            Game.moveDisabled = true;
+        }else{
+            setTimeout(()=>{
+                this.props.setShowHealthAndAmmo(true);
+            },2000)
+        }
         this.level = new levels[this.currentLevelIndex](this.root);
+     
     }
     clearLevel(){
         this.props.setStarted(false);
@@ -107,6 +135,9 @@ const GameContainer = props =>{
     const [menuVisible, setMenuVisible] = useState(false);
     const [debugVisible, setDebugVisible] = useState(true);
     const [menuType, setMenuType] = useState(menuTypes.pause);
+    const [dialogText, setDialogText] = useState("");
+    const [level, setLevel] = useState(0);
+    const [showHealthAndAmmo, setShowHealthAndAmmo] = useState(false);
     const [debugState, setDebugState] = useState({
         xPosition: 0,
         boundaryLeft: -300,
@@ -138,9 +169,10 @@ const GameContainer = props =>{
     window.changeAmmo = function(amt){
         // amt can be positive or negative;
         let currentAmmo = ammo;
-        if(currentAmmo < 0) currentAmmo = 0;
-        if(currentAmmo > 100) currentAmmo = 100;
-        setAmmo(currentAmmo + amt);
+        let newAmmo = currentAmmo + amt;
+        if(newAmmo <= 0) newAmmo = 0;
+        if(newAmmo > 100) newAmmo = 100;
+        setAmmo(newAmmo);
     }
     
     useEffect(()=>{
@@ -152,6 +184,9 @@ const GameContainer = props =>{
             setTimeout(()=>{
                 window.game = new Game({
                     setStarted,
+                    setDialogText,
+                    setLevel,
+                    setShowHealthAndAmmo
                 });
             },0)
             setStarted(true);
@@ -176,11 +211,16 @@ const GameContainer = props =>{
             Game.on("level-completion",()=>{
                 showMenu(menuTypes.levelCompletion)
             })
+
         }
     },[])
 
     const exitGamePlay = ()=>{
         setMenuType(menuTypes.levelSelect);
+    }
+
+    const nextLevel = ()=>{
+        window.game.nextLevel();
     }
 
     const resume = ()=>{
@@ -212,10 +252,24 @@ const GameContainer = props =>{
 
     return(
         <>
-        {menuVisible && <Menu type={menuType} quit={exitGamePlay} restart={restart} resume={resume} style={menuStyle}/>}
+        {menuVisible && <Menu 
+            type={menuType} 
+            quit={exitGamePlay} 
+            restart={restart} 
+            resume={resume} 
+            nextLevel={nextLevel}
+            level={level}
+            style={menuStyle}/>}
         {(started && menuType != menuTypes.levelSelect)  && <Map id="map">
            
-            <MetricsHUD health={health} ammo={ammo}></MetricsHUD>
+            <MetricsHUD 
+                health={health} 
+                ammo={ammo}
+                dialogText={dialogText}
+                setDialogText={setDialogText}
+                level={level}
+                showHealthAndAmmo={showHealthAndAmmo}
+            />
             {debugVisible && <ul>
                     <P>
                         {Object.keys(debugState).map(key=><li>{key}: {debugState[key]}</li>)}

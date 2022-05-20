@@ -199,6 +199,8 @@ class Batmobile extends GameObject{
 
     // move to the left or right
     move(direction = "left"){
+
+        if(Game.moveDisabled) return;
   
         const directions = {
             left: -10,

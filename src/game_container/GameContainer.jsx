@@ -115,6 +115,7 @@ export class Game extends Emitter{
         Game.moveDisabled = false;
         if(i !== null){
             this.currentLevelIndex = i;
+            this.props.setLevel(this.currentLevelIndex);
         }
         this.level = new levels[this.currentLevelIndex](this.root);
      

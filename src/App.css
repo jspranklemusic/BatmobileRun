@@ -107,3 +107,39 @@ body, html{
     z-index: -1;
   }
 }
+
+@keyframes spinning{
+  0%{
+    transform: rotateZ(0deg);
+  }
+  100%{
+    transform: rotateZ(359deg);
+  }
+}
+
+@keyframes flicker {
+  0%{
+    transform: scale(1);
+    filter: blur(0px) opacity(1);
+  }
+  50%{
+    transform: scale(0.7);
+    filter: blur(1px) opacity(0.8);
+  }
+  100%{
+    transform: scale(1);
+    filter: blur(0px) opacity(1);
+  }
+}
+
+@keyframes batsymbol{
+  0%{
+    transform:  perspective(400px) rotateY(30deg) rotateX(-10deg) translate(0px,0px);
+  }
+  50%{
+    transform:  perspective(360px) rotateY(30deg) rotateX(-10deg) translate(30px,30px);
+  }
+  100%{
+   transform:  perspective(400px) rotateY(30deg) rotateX(-10deg) translate(0px,0px);
+  }
+}

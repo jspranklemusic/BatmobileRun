@@ -8,7 +8,7 @@ import CollisionListener from "./CollisionListener";
 import MetricsHUD from "./MetricsHUD";
 import Menu from "./Menu";
 import Emitter from "./Emitter";
-
+import MainMenu from "./MainMenu";
 
 const Map = styled.div`
     width: 100vw;
@@ -45,7 +45,6 @@ export class Game extends Emitter{
         super();
         this.props = props;
         this.root = document.getElementById("map");
-        this.loadLevel();
 
         Game.on("checkpoint",()=>{
         })
@@ -77,15 +76,7 @@ export class Game extends Emitter{
             Game.stoppedState = "death";
         })
         Game.on("restart",()=>{
-            window.changeAmmo(-100);
-            window.changeHealth(100);
-            this.props.setShowHealthAndAmmo(false)
-            Game.emit("toggke")
-            Game.death = false;
-            Game.stoppedState = null;
-            GameObject.reset();
-            CollisionListener.reset();
-            this.level.destroy();
+            this.clear();
             this.loadLevel();
         })
         Game.listen("keydown",e=>{
@@ -100,19 +91,31 @@ export class Game extends Emitter{
         })
     }
 
+    clear(){
+        window.changeAmmo(-100);
+        window.changeHealth(100);
+        this.props.setShowHealthAndAmmo(false)
+        Game.death = false;
+        Game.stoppedState = null;
+        GameObject.reset();
+        CollisionListener.reset();
+        this.level.destroy();
+    }
+
     nextLevel(){
         this.currentLevelIndex++;
         this.props.setLevel(this.currentLevelIndex);
+        this.props.setShowHealthAndAmmo(false);
         Game.emit("restart");
     }
 
-    loadLevel(){
-        setTimeout(()=>{
-            this.props.setShowHealthAndAmmo(true);
-        },2000)
+    loadLevel(i=null){
+   
         Game.accelerateDisabled = false;
         Game.moveDisabled = false;
-
+        if(i !== null){
+            this.currentLevelIndex = i;
+        }
         this.level = new levels[this.currentLevelIndex](this.root);
      
     }
@@ -136,12 +139,22 @@ const GameContainer = props =>{
     const [dialogText, setDialogText] = useState("");
     const [level, setLevel] = useState(0);
     const [showHealthAndAmmo, setShowHealthAndAmmo] = useState(false);
+    const [mainMenuVisible, setMainMenuVisible] = useState(true);
+    const [mainMenuOpacity, setMainMenuOpacity] = useState(0);
     const [debugState, setDebugState] = useState({
         xPosition: 0,
         boundaryLeft: -300,
         boundaryRight: 300,
         batarangs: Batarang.capacity,   
     })
+
+    const clickHandler = i => {
+        setMainMenuOpacity(0);
+        setTimeout(()=>{
+            setMainMenuVisible(false);
+            window.game.loadLevel(i);
+        },1000)
+    }
 
     window.setDebugState = setDebugState;
     window.debugState = debugState;
@@ -188,6 +201,7 @@ const GameContainer = props =>{
                 });
             },0)
             setStarted(true);
+            setMainMenuOpacity(1);
             setInterval(()=>{
                 seconds++;
                 window.debug({seconds})
@@ -214,7 +228,12 @@ const GameContainer = props =>{
     },[])
 
     const exitGamePlay = ()=>{
-        setMenuType(menuTypes.levelSelect);
+        resetMenu();
+        window.game.clear();
+        setMainMenuVisible(true);
+        setTimeout(()=>{
+            setMainMenuOpacity(1);
+        },1000)
     }
 
     const nextLevel = ()=>{
@@ -250,7 +269,7 @@ const GameContainer = props =>{
 
     return(
         <>
-        {menuVisible && <Menu 
+        {menuVisible && !mainMenuVisible && <Menu 
             type={menuType} 
             quit={exitGamePlay} 
             restart={restart} 
@@ -260,20 +279,21 @@ const GameContainer = props =>{
             style={menuStyle}/>}
         {(started && menuType != menuTypes.levelSelect)  && <Map id="map">
            
-            <MetricsHUD 
+            {!mainMenuVisible && <MetricsHUD 
                 health={health} 
                 ammo={ammo}
                 dialogText={dialogText}
                 setDialogText={setDialogText}
                 level={level}
                 showHealthAndAmmo={showHealthAndAmmo}
-            />
-            {debugVisible && <ul>
+            />}
+            {debugVisible && !mainMenuVisible && <ul>
                     <P>
                         {Object.keys(debugState).map(key=><li>{key}: {debugState[key]}</li>)}
                     </P>
                 </ul>}
         </Map>}
+        {mainMenuVisible && <MainMenu opacity={mainMenuOpacity} clickHandler={clickHandler} levels={levels}/>}
         </>
     )
 }

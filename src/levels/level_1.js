@@ -27,7 +27,10 @@ class level_1{
             // only structures
             [0,()=>{
                 new Structure(road.rootElement,road,null,{left: "0px"});     
-                Game.emit("new-dialog","Level 1")       
+                Game.emit("new-dialog","Level 1 - Streets of Gotham")       
+                setTimeout(()=>{
+                    window.game.props.setShowHealthAndAmmo(true);
+                },2500)
             }],
             [1000,()=>{
                 new Structure(road.rootElement,road);
@@ -100,6 +103,9 @@ class level_1{
             [500,()=>{
                 new Health(road.rootElement,road);
                 new Ammo(road.rootElement,road,5);
+                Game.emit("new-dialog",
+                `Beware of the bombs. When they explode, they do a lot of damage.`
+                )
             }],
 
             // first bombs section

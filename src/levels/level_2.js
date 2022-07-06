@@ -10,8 +10,9 @@ import GameObject from "../game_objects/GameObject";
 import { Game } from "../game_container/GameContainer";
 import { pointTypes } from "../game_container/CollisionListener";
 import AchievementPoint from "../game_objects/achievement_points/AchievementPoint";
+import Motorcycle from "../game_objects/enemy/Motorcycle";
 
-class level_1{
+class level_2{
     constructor(root){
         const collisionListener = new CollisionListener;
         const road = new Road(root);
@@ -25,12 +26,9 @@ class level_1{
         // Two values. 1. The distance from the previous position, 2. the function to run
         const startingPositions = [
             // only structures
-            [0,()=>{
-                new Structure(road.rootElement,road,null,{left: "0px"});     
+            [100,()=>{
                 Game.emit("new-dialog","Level 2")       
-            }],
-            [500,()=>{
-                new AchievementPoint(road.rootElement,road,pointTypes.finish_line);
+                new Motorcycle(road.rootElement,road, "back");
             }]
           
         ]
@@ -62,4 +60,4 @@ class level_1{
     }
 }
 
-export default level_1;
+export default level_2;

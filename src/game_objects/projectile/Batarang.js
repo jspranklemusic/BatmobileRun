@@ -55,22 +55,29 @@ class Batarang extends GameObject{
             Batarang.shooting = true;
             Batarang.capacity -= 1;
             window.changeAmmo(-1);
-            window.debug({batarangs: Batarang.capacity})
-            this.shootInterval = setInterval(()=>{
-                if(this.game.stoppedState) return;
-                const rect = this.rootElement.getBoundingClientRect();
-                if(rect.bottom < 0){
-                    clearInterval(this.shootInterval)
-                    this.shootInterval = null;
-                    Batarang.shooting = false;
-                    this.destroy();
-                    window.clearDebug("batarang_position");
-                }else{
-                    this.yPosition -= 20;
-                    this.rootElement.style.transform = `translateY(${this.yPosition}px)`
-                    window.debug({batarang_position: rect.top})
+            window.debug({batarangs: Batarang.capacity});
+            this.shootInterval = 1;
+            const loop = ()=>{
+                if(!this.shootInterval){
+                    return;
                 }
-            },30)
+                return requestAnimationFrame(()=>{
+                    if(this.game.stoppedState) return loop();
+                    const rect = this.rootElement.getBoundingClientRect();
+                    if(rect.bottom < 0){
+                        this.shootInterval = null;
+                        Batarang.shooting = false;
+                        this.destroy();
+                        window.clearDebug("batarang_position");
+                    }else{
+                        this.yPosition -= 10;
+                        this.rootElement.style.transform = `translateY(${this.yPosition}px)`
+                        window.debug({batarang_position: rect.top})
+                    }
+                    loop();
+                })
+            }
+            loop();
         }
     }
 

@@ -13,7 +13,6 @@ class Structure extends GameObject{
     constructor(parent,road, dimensions, coords){
         const root = document.createElement("div");
         super(root,collision_types.indestructible);
-
         let sizeDimensions ={ width: "40rem", height: "8rem", ...dimensions };
         let xPosition = coords ? coords : { right: "0px" }
         this.styleElement(root,{
@@ -29,15 +28,18 @@ class Structure extends GameObject{
 
         parent.appendChild(root);
         this.moveStructure(road);
-
     }
 
     moveStructure(road){
-        setInterval(()=>{
-            if(this.game.stoppedState) return;
-            this.yPosition += road.speed;
-            this.rootElement.style.transform = `translateY(${this.yPosition/10}rem)`
-        },30)
+        const loop = ()=>{
+            return requestAnimationFrame(()=>{
+                if(this.game.stoppedState) return loop();
+                this.yPosition += road.speed/2;
+                this.rootElement.style.transform = `translateY(${this.yPosition/10}rem)`
+                loop();
+            })
+        }
+        loop();
     }
 }
 

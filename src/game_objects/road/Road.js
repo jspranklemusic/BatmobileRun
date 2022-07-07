@@ -91,14 +91,19 @@ class Road extends GameObject{
 
 
     moveLines(){
-        this.moveLinesInterval = setInterval(()=>{
-            if(this.game.stoppedState) return;
-            this.pixelsTraversed += (this.speed*1.5);
-            GameObject.emit("pixels-traversed",this.pixelsTraversed );
-            window.debug({pixelsTraversed: this.pixelsTraversed});
-            this.yPosition += (this.speed);
-            this.rootElement.style.backgroundPositionY = `${this.yPosition/10}rem`
-        },30)
+        const moveLines = ()=>{
+            requestAnimationFrame(()=>{
+                if(this.game.paused) return moveLines();
+                else if(this.game.death) return;
+                this.pixelsTraversed += (this.speed*1.5)/2;
+                GameObject.emit("pixels-traversed",this.pixelsTraversed );
+                window.debug({pixelsTraversed: this.pixelsTraversed});
+                this.yPosition += (this.speed)/2;
+                this.rootElement.style.backgroundPositionY = `${this.yPosition/10}rem`;
+                moveLines();
+            })
+        }
+        moveLines();
     }
 
     onDestroy(){

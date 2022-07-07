@@ -135,19 +135,26 @@ function populateDescription(text="I know Vue, React, and some more advanced fea
     let i = 0;
     const span = document.createElement("span");
     descriptionRef.appendChild(span);
-    let itvl = setInterval(()=>{
-        if(Game.stoppedState) return;
-       if (i < text.length){
-        span.innerHTML += text[i]
-        i++;
-        }else{
-            clearInterval(itvl);
-            vanishTimeout = setTimeout(()=>{
-                setTyping(false);
-            },expire);
-            return;
-        }
-    },30)
+    let itvl = 1;
+    const loop = ()=>{
+        if(!itvl) return;
+        return requestAnimationFrame(()=>{
+            if(Game.stoppedState) return;
+            if (i < text.length){
+             span.innerHTML += text[i]
+             i++;
+             }else{
+                 itvl = 0;
+                 vanishTimeout = setTimeout(()=>{
+                     setTyping(false);
+                 },expire);
+                 return;
+             }
+             loop();
+        })
+    }
+    loop()
+ 
 }
 
 const MetricsHUD = props => {

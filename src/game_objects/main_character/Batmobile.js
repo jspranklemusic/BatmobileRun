@@ -99,7 +99,7 @@ class Batmobile extends GameObject{
                 }else if(e.keyCode == 39){
                     this.cancelMove();
                 }
-                this.pressingKey = null
+                this.pressingKey = null;
             }
         })
 
@@ -108,47 +108,60 @@ class Batmobile extends GameObject{
             if(this.slowdownInterval | this.stuck) return;
             clearInterval(this.accelerateInterval);
             this.accelerateInterval = null;
-
-            this.slowdownInterval = setInterval(()=>{
-                if(!!this.game.stoppedState | this.stuck | !this.slowdownInterval) return;
-                console.log(this.yPosition,this.game.stoppedState)
-                if(this.yPosition < -2){
-                    this.yPosition += 2;
-                    this.rootElement.style.transform = `translateX(${this.xPosition/10}rem) translateY(${this.yPosition/10}rem)`
-                }else if(this.yPosition > 2){
-                    this.yPosition -= 2;
-                    this.rootElement.style.transform = `translateX(${this.xPosition/10}rem) translateY(${this.yPosition/10}rem)`
-                }else{
-                    this.yPosition = 0;
-                    this.rootElement.style.transform = `translateX(${this.xPosition/10}rem) translateY(${this.yPosition/10}rem)`;
-                    clearInterval(this.slowdownInterval);
-                    this.slowdownInterval = null;
+            this.slowdownInterval = 1;
+            const slowDown = ()=>{
+                if(!this.slowdownInterval){
+                    return;
                 }
-                window.debug({yPosition:this.yPosition})
-            },30)
+                return requestAnimationFrame(()=>{
+                    if(!!this.game.stoppedState | this.stuck | !this.slowdownInterval) return;
+                    console.log(this.yPosition,this.game.stoppedState)
+                    if(this.yPosition < -2){
+                        this.yPosition += 2;
+                        this.rootElement.style.transform = `translateX(${this.xPosition/10}rem) translateY(${this.yPosition/10}rem)`
+                    }else if(this.yPosition > 2){
+                        this.yPosition -= 2;
+                        this.rootElement.style.transform = `translateX(${this.xPosition/10}rem) translateY(${this.yPosition/10}rem)`
+                    }else{
+                        this.yPosition = 0;
+                        this.rootElement.style.transform = `translateX(${this.xPosition/10}rem) translateY(${this.yPosition/10}rem)`;
+                        clearInterval(this.slowdownInterval);
+                        this.slowdownInterval = null;
+                    }
+                    window.debug({yPosition:this.yPosition});
+                    slowDown();
+                })
+            }
+            slowDown();
         }
         GameObject.on('resumeRegularSpeed',resumeRegularSpeed);
 
         const accelerate = ()=> {
-                if(this.accelerateInterval | this.stuck) return;
-                clearInterval(this.slowdownInterval);
-                this.slowdownInterval = null;
-                this.accelerateInterval = setInterval(()=>{
+            if(this.accelerateInterval | this.stuck) return;
+            this.slowdownInterval = null;
+            this.accelerateInterval = 1;
+            const accelerateLoop = ()=>{
+                if(!this.accelerateInterval){
+                    return;
+                }
+                return requestAnimationFrame(()=>{
                     if(this.game.stoppedState) return;
                     if(this.stuck) return;
                     if(this.yPosition > -200){
-                        this.yPosition -= 2;
+                        this.yPosition -= 1;
                         this.rootElement.style.transform = `translateX(${this.xPosition/10}rem) translateY(${this.yPosition/10}rem)`
                     }else{
                         this.yPosition = -200;
                         this.rootElement.style.transform = `translateX(${this.xPosition/10}rem) translateY(${this.yPosition/10}rem)`;
-                        clearInterval(this.accelerateInterval);
-                        this.accelerateInterval = null
+                        this.accelerateInterval = null;
                     }
-                    window.debug({yPosition:this.yPosition})
-                },30)
-
+                    window.debug({yPosition:this.yPosition});
+                    accelerateLoop();
+                })
+            }
+            accelerateLoop();
         }
+
         GameObject.on("accelerate",accelerate);
 
         GameObject.on("indestructible_collision",(objectRect)=>{
@@ -190,10 +203,10 @@ class Batmobile extends GameObject{
     onDestroy(){
         return new Promise(resolve=>{
             this.cancelMove();
-            clearInterval(this.accelerateInterval);
-            clearInterval(this.slowdownInterval);
-            resolve("deleting object",this.rootId)
-        })
+            this.accelerateInterval = 0;
+            this.slowdownInterval = 0;
+            resolve("deleting object",this.rootId);
+        });
     }
 
 
@@ -203,8 +216,8 @@ class Batmobile extends GameObject{
         if(Game.moveDisabled) return;
   
         const directions = {
-            left: -10,
-            right: 10
+            left: -5,
+            right: 5
         }
         
         if(!this.moveInterval[direction]){
@@ -214,12 +227,15 @@ class Batmobile extends GameObject{
             }else{
                 opposite = "left";
             }
-            clearInterval(this.moveInterval[opposite]);
             this.moveInterval[opposite] = null;
-
-
-            this.moveInterval[direction] = setInterval(()=>{
-                if(this.game.stoppedState) return;
+            this.moveInterval[direction] = 1;
+            const moveInterval = ()=>{
+                if(!this.moveInterval[direction]){
+                    this.cancelMove();
+                    return;
+                }
+                return requestAnimationFrame(()=>{
+                if(this.game.stoppedState) return moveInterval();
                 const playerRect = this.rootElement.getBoundingClientRect();
                 const modifiedRect = {
                     top: playerRect.top,
@@ -230,7 +246,7 @@ class Batmobile extends GameObject{
                 
                 // return if colliding with indestructible object
                 if(CollisionListener.willPlayerCollide(playerRect,modifiedRect)){
-                    return;
+                    return moveInterval();
                 }
                 const diff = this.xPosition + directions[direction];
                 // return if out of bounds
@@ -244,17 +260,18 @@ class Batmobile extends GameObject{
                 this.svg.style.transform = `
                     rotateZ(${this.svgTransform.rotateZ}deg)
                     `
-                window.setDebugState({...window.debugState, xPosition: this.xPosition})
-            },30)
+                window.setDebugState({...window.debugState, xPosition: this.xPosition});
+                moveInterval();
+                })
+            }
+            moveInterval();
 
         }
     }
 
     cancelMove(){
-        clearInterval(this.moveInterval.left);
-        clearInterval(this.moveInterval.right);
-        this.moveInterval={left: null, right: null};
-        this.svgTransform.rotateZ = 0
+        this.moveInterval = { left: null, right: null };
+        this.svgTransform.rotateZ = 0;
         this.svg.style.transform = `
             rotateZ(${this.svgTransform.rotateZ}deg)
             `

@@ -44,13 +44,17 @@ class AchievementPoint extends GameObject{
     }
 
     moveLines(){
-        this.moveInterval = setInterval(()=>{
-            if(this.game.stoppedState) return;
-            this.yPosition += this.road.speed;
-            this.styleElement(this.rootElement,{
-                transform: `translateY(${this.yPosition}px)`
+        const loop = ()=>{
+            return requestAnimationFrame(()=>{
+                if(this.game.stoppedState) return loop();
+                this.yPosition += this.road.speed/2;
+                this.styleElement(this.rootElement,{
+                    transform: `translateY(${this.yPosition}px)`
+                })
+                loop();
             })
-        },30)
+        }
+        loop();
     }
 }
 

@@ -43,7 +43,7 @@ class Bricks extends GameObject{
 
     onDestroy(){
         return new Promise((resolve)=>{
-            const gifImage = document.createElement("img")
+            const gifImage = document.createElement("img");
             gifImage.src = smoke_animation;
             this.styleElement(gifImage,{
                 width: "100%",
@@ -63,22 +63,24 @@ class Bricks extends GameObject{
             })
            
             this.scale = 1.2;
-            // this.rootElement.firstChild.data = bricksBreak1;
             const time = 75;
             let i = 0;
-            const interval = setInterval(()=>{
-                if(i >= BricksSvgSequence.length){
-                    clearInterval(interval);
-                }
-                const contentDocument = this.rootElement.firstChild.contentDocument;
-                if(contentDocument){
-                    contentDocument.getElementById("Layer_1").innerHTML = BricksSvgSequence[i];
-                    i++;
-                }
-    
-            },time)
+            const loop = ()=>{
+                return requestAnimationFrame(()=>{
+                    if(i >= BricksSvgSequence.length){
+                        return;
+                    }
+                    const contentDocument = this.rootElement.firstChild.contentDocument;
+                    if(contentDocument){
+                        contentDocument.getElementById("Layer_1").innerHTML = BricksSvgSequence[i];
+                        i++;
+                    }
+                    loop();
+                });
+            }
+            loop();
+     
             setTimeout(()=>{
-                clearInterval(interval)
                 return resolve(console.log("deleting object: ",this.rootId));
             },500)
         });
@@ -86,14 +88,18 @@ class Bricks extends GameObject{
 
     
     moveBrick(){
-        setInterval(()=>{
-            if(this.game.stoppedState) return;
-            this.yPosition += this.road.speed
-            this.brick.style.transform = `translateY(${this.yPosition/10}rem) scale(${this.scale})`
-            if(this.rootElement.getBoundingClientRect().top > window.innerHeight){
-                this.destroy();
-            }
-        },30)
+        const loop = ()=>{
+            return requestAnimationFrame(()=>{
+                if(this.game.stoppedState) return loop();
+                this.yPosition += this.road.speed/2
+                this.brick.style.transform = `translateY(${this.yPosition/10}rem) scale(${this.scale})`
+                if(this.rootElement.getBoundingClientRect().top > window.innerHeight){
+                    this.destroy();
+                }
+                loop()
+            })
+        }
+        loop();
     }
 }
 

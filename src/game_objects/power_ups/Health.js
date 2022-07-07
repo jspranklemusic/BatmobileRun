@@ -44,22 +44,24 @@ class Health extends GameObject{
         parent.appendChild(element);
 
         this.capacity = capacity;
-        this.moveInterval = setInterval(()=>{
-            if(this.game.stoppedState) return;
-            const rect = this.rootElement.getBoundingClientRect();
-            if(rect.top < window.innerHeight){
-                this.top += road.speed;
-                this.rootElement.style.transform = `translateY(${this.top/10}rem)`
-            }else{
-                this.outOfBounds = true;
-                this.destroy();
-            }
-
-        },30)
+        const loop = ()=>{
+            return requestAnimationFrame(()=>{
+                if(this.game.stoppedState) return loop();
+                const rect = this.rootElement.getBoundingClientRect();
+                if(rect.top < window.innerHeight){
+                    this.top += road.speed/2;
+                    this.rootElement.style.transform = `translateY(${this.top/10}rem)`
+                }else{
+                    this.outOfBounds = true;
+                    this.destroy();
+                }
+                return loop();
+            })
+        }
+        loop();
     }
 
     powerupFunction(){
-        console.log(this.capacity)
         window.changeHealth(this.capacity)
     }
 

@@ -29,9 +29,14 @@ class CollisionListener{
     }
 
     checkForCollisions(){
-        this.interval = setInterval(()=>{
-            // check player
-            if(CollisionListener.collisionObjects.player.length > 0){
+        this.interval = 1;
+        const loop = ()=>{
+            if(!this.interval){
+                return;
+            }
+            return requestAnimationFrame(()=>{
+                 // check player
+             if(CollisionListener.collisionObjects.player.length > 0){
                 const player = CollisionListener.collisionObjects.player[0];
                 const playerRect = player.rootElement.getBoundingClientRect();
                 const projectiles = CollisionListener.collisionObjects.projectile.map(p=>p.rootElement.getBoundingClientRect());
@@ -88,11 +93,14 @@ class CollisionListener{
                 
                 // check to see if car is out of map
                 if(playerRect.top > window.innerHeight){
-                    clearInterval(this.interval)
+                    this.interval = 0;
                     Game.emit("death")
                 }
             }
-        },30)
+            loop();
+            });
+        }
+        loop();
     }
 
     static willPlayerCollide(playerRect1, playerRect2){
@@ -159,7 +167,7 @@ class CollisionListener{
     }
 
     static reset(){
-        clearInterval(this.interval);
+        this.interval = 0;
         CollisionListener.collisionObjects = {}
         console.log(this);
     }

@@ -54,7 +54,7 @@ class Bomb extends GameObject{
     onDestroy(){
         return new Promise((resolve)=>{
             clearInterval(this.interval)
-            const gifImage = document.createElement("img")
+            const gifImage = document.createElement("img");
             gifImage.src = explosion_animation;
             this.styleElement(gifImage,{
                 width: "100%",

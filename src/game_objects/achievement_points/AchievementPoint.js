@@ -39,11 +39,11 @@ class AchievementPoint extends GameObject{
             })
         }
 
-        this.moveLines();
+        this.moveLoop();
         parent.appendChild(root);
     }
 
-    moveLines(){
+    moveLoop(){
         const loop = ()=>{
             return requestAnimationFrame(()=>{
                 if(this.game.stoppedState) return loop();

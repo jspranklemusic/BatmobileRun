@@ -43,6 +43,20 @@ class GameObject extends Emitter{
         });
     }
 
+    moveLoop(){
+        const loop = ()=>{
+            return requestAnimationFrame(()=>{
+                if(this.game.stoppedState) return loop();
+                this.yPosition += this.road.speed/2;
+                this.styleElement(this.rootElement,{
+                    transform: `translateY(${this.yPosition}px)`
+                })
+                loop();
+            })
+        }
+        loop();
+    }
+
     async destroy(){
         // first, stop the collisions
         collisionListener.unregisterCollisionObject(this.collision_type,this.rootId);

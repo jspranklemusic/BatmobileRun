@@ -126,8 +126,6 @@ export class Game extends Emitter{
     }
 }
 
-
-
 const GameContainer = props =>{
     const [health, setHealth] = useState(100);
     const [ammo, setAmmo] = useState(0);
@@ -200,7 +198,7 @@ const GameContainer = props =>{
                     setLevel,
                     setShowHealthAndAmmo
                 });
-            },0)
+            },1)
             setStarted(true);
             setMainMenuOpacity(1);
             setInterval(()=>{

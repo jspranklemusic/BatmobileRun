@@ -6,7 +6,7 @@ import level_2 from "./level_2";
 const levels = [
     level_0,
     level_1,
-    level_2
+    // level_2
 ]
 
 export default levels;

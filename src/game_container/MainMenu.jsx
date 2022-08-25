@@ -206,7 +206,7 @@ const MainMenu = props =>{
             </BatSymbol>
                 <object style={objectStyle} data={citySvg} type="image/svg+xml"></object>
                 <Menu>
-                    <h1>Batmobile Run</h1>
+                    <h1>Happy Birthday, Dominic</h1>
                     <em>Select a level</em>
                     <div className="levels-container">
                         {props.levels.map((level,i)=>{
